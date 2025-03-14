@@ -1,0 +1,60 @@
+<div mat-dialog-title>
+    <h1>Car Form</h1>
+</div>
+<form [formGroup]="carForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+        <div class="row">
+            <div class="col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Manufacturers Code</mat-label>
+                    <input matInput type="text" placeholder="Ex. C2878" formControlName="manufacturersCode">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Model</mat-label>
+                    <input matInput type="text" placeholder="Ex. Porsche" formControlName="model">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Notes</mat-label>
+                    <textarea rows="3" matInput placeholder="Ex. 4" formControlName="notes"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Make</mat-label>
+                    <input matInput type="text" placeholder="Ex. Scalextric" formControlName="make">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Estimated Value</mat-label>
+                    <input matInput type="number" placeholder="Ex. 50" formControlName="estimatedValue">
+                </mat-form-field>
+                <mat-label id="example-radio-group-label">Boxed?</mat-label>
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                    formControlName="boxed">
+                    <mat-radio-button class="example-radio-button" *ngFor="let choice of boxedChoices"
+                        [value]="choice.value">
+                        {{choice.label}}
+                    </mat-radio-button>
+                </mat-radio-group>
+                <div class="row pt-2 ml-0">
+                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                    <div class="file-upload">
+                        <div *ngIf="!image">
+                            No file uploaded yet.
+                        </div>
+                        <div *ngIf="image">
+                            <img [src]="'data:image/png;base64,'+image" class="thumbnail" alt="Car Image"/>
+                        </div>
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn"
+                            (click)="fileUpload.click()">            
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div mat-dialog-actions class="action">
+        <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
+        <button mat-raised-button color="primary" type="submit">{{data ? 'Update': 'Save'}}</button>
+    </div>
+</form>

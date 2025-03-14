@@ -1,0 +1,71 @@
+<div class="flex-grid-quarters">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <mat-icon class="custom-nav-button">directions_car</mat-icon>
+        <h3 class="card-title"><b>Total Cars</b></h3>
+        <p class="card-text">{{totalCarsCount}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <mat-icon class="custom-nav-button">attach_money</mat-icon>
+        <h3 class="card-title"><b>Estimated Value</b></h3>
+        <p class="card-text">£{{totalCarsValue}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <mat-icon class="custom-nav-button">backpack</mat-icon>
+        <h3 class="card-title"><b>Boxed Cars</b></h3>
+        <p class="card-text">{{boxedTotal}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <mat-icon class="custom-nav-button">no_backpack</mat-icon>
+        <h3 class="card-title"><b>Unboxed Cars</b></h3>
+        <p class="card-text">{{unboxedTotal}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex-grid-half">
+  <div class="col">
+    <app-carousel [cars]="cars"></app-carousel>
+  </div>
+  <div class="col hide-on-mobile">
+    <h3><b>Highest Valued Cars</b></h3>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="make">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Make </th>
+          <td mat-cell *matCellDef="let row"> {{row.Make}}</td>
+        </ng-container>
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
+          <td mat-cell *matCellDef="let row"> {{row.Model}}</td>
+        </ng-container>
+        <ng-container matColumnDef="manufacturersCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturers Code </th>
+          <td mat-cell *matCellDef="let row"> {{row.ManufacturersCode}}</td>
+        </ng-container>
+        <ng-container matColumnDef="estimatedValue">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Value </th>
+          <td mat-cell *matCellDef="let row"> £{{row.EstimatedValue}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data to show</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

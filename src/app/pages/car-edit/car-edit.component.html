@@ -1,0 +1,68 @@
+<div class="main-body">
+    <form [formGroup]="carForm" (ngSubmit)="onFormSubmit()">
+        <div class="row">
+            <div class="column form-column">
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Manufacturers Code</mat-label>
+                        <input matInput type="text" placeholder="Ex. C2878" formControlName="ManufacturersCode">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Make</mat-label>
+                        <input matInput type="text" placeholder="Ex. Scalextric" formControlName="Make">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Model</mat-label>
+                        <input matInput type="text" placeholder="Ex. Porsche" formControlName="Model">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <mat-radio-group aria-label="Select an option" formControlName="Boxed">
+                            <mat-label><b>Boxed?</b></mat-label>
+                            <mat-radio-button [value]=true>Yes</mat-radio-button>
+                            <mat-radio-button [value]=false>No</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Estimated Value</mat-label>
+                            <input matInput type="number" placeholder="Ex. 50" formControlName="EstimatedValue">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Notes</mat-label>
+                        <textarea rows="3" matInput placeholder="Ex. 4" formControlName="Notes"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="column image-column">
+                <div class="row pt-2 ml-0">
+                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                    <div class="file-upload">
+                        <div *ngIf="!image">
+                            No file uploaded yet.
+                        </div>
+                        <div *ngIf="image">
+                            <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Car Image" />
+                        </div>
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn"
+                            (click)="fileUpload.click()">            
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row action">
+            <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Update</button>
+        </div>
+    </form>
+</div>
