@@ -10,9 +10,6 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-  "engines": {
-    "node": "14.x"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.0.0",
