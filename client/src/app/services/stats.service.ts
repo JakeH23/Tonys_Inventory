@@ -13,6 +13,6 @@ export class StatsService {
   constructor(private _http: HttpClient) { }
 
   getAllStatistics(): Observable<any> {
-    return this._http.get(`statistics`, { headers: this.headers });
+    return this._http.get(`${this.baseUrl}/statistics`, { headers: this.headers });
   }
 }
