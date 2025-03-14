@@ -1,0 +1,8 @@
+{
+    "/api": {
+      "target": "https://tcinventory-production.up.railway.app",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+}

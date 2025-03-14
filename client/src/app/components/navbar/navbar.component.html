@@ -1,0 +1,54 @@
+<div fxLayout="column" fxFlexFill>
+    <mat-toolbar class="navbar-color mat-elevation-z8 p-0" fxLayout="row" fxLayoutAlign="start stretch"
+        style="z-index: 2">
+
+        <button mat-button (click)="drawer.toggle()">
+            <mat-icon class="custom-nav-button">menu</mat-icon>
+        </button>
+
+        <button mat-button routerLink="/" routerLinkActive="router-link-active">
+            <mat-icon class="custom-nav-button">home</mat-icon>
+        </button>
+
+        <!-- <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+            <img class="nav-image-header" src="../../../assets/toolbar-header.jpg"/>
+        </div> -->
+
+        <span fxFlex></span>
+        <span class="example-spacer"></span>
+        <button mat-raised-button class="custom-button mr-2" (click)="openAddEditCarForm()">
+            ADD CAR
+        </button>
+    </mat-toolbar>
+
+    <mat-drawer-container fxFlex autosize class="background">
+        <mat-drawer #drawer>
+            <div fxLayout="column">
+                <button mat-button routerLink="/" routerLinkActive="selected no-border txt-bold"
+                    fxLayoutAlign="start" class="py-2 pr-5" (click)="drawer.toggle()">
+                    <mat-icon class="mr-2">filter_1</mat-icon>Cars Home</button>
+
+                <mat-divider></mat-divider>
+            </div>
+            <div fxLayout="column">
+                <button mat-button routerLink="/cars"
+                    fxLayoutAlign="start" class="py-2 pr-5" (click)="drawer.toggle()">
+                    <mat-icon class="mr-2">filter_2</mat-icon>Slot Cars</button>
+
+                <mat-divider></mat-divider>
+            </div>
+            <div fxLayout="column">
+                <button mat-button routerLink="/parts"
+                    fxLayoutAlign="start" class="py-2 pr-5" (click)="drawer.toggle()">
+                    <mat-icon class="mr-2">filter_3</mat-icon>Parts</button>
+                <mat-divider></mat-divider>
+            </div>
+        </mat-drawer>
+
+        <!--PAGES-->
+        <div style="display: inline;">
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-drawer-container>
+</div>
