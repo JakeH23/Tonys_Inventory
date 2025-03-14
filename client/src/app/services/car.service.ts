@@ -13,18 +13,18 @@ export class CarService {
   constructor(private _http: HttpClient) { }
 
   addCar(data: any): Observable<any> {
-    return this._http.post<any>(`${this.baseUrl}/cars`, data, { headers: this.headers });
+    return this._http.post<any>(`cars`, data, { headers: this.headers });
   }
 
   updateCar(id: number, data: any): Observable<any> {
-    return this._http.put(`${this.baseUrl}/cars/${id}`, data, { headers: this.headers });
+    return this._http.put(`cars/${id}`, data, { headers: this.headers });
   }
 
   getCarList(): Observable<any> {
-    return this._http.get(`${this.baseUrl}/cars`, { headers: this.headers });
+    return this._http.get(`cars`, { headers: this.headers });
   }
 
   getCarById(id: number): Observable<any> {
-    return this._http.get(`${this.baseUrl}/cars/${id}`, { headers: this.headers });
+    return this._http.get(`cars/${id}`, { headers: this.headers });
   }
 }
