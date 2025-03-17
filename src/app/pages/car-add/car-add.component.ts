@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
-import { CarImagesService } from 'src/app/services/car-images.service';
-import { CarImage } from 'src/app/components/carousel/carousel.interface';
-import { BoxedChoice } from 'src/app/models/BoxedChoice';
+import { CarImagesService } from '../../../../src/app/services/car-images.service';
+import { CarImage } from '../../../../src/app/components/carousel/carousel.interface';
+import { BoxedChoice } from '../../../../src/app/models/BoxedChoice';
 
 @Component({
   selector: 'app-car-add',
