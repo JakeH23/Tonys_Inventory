@@ -10,7 +10,9 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@angular/animations": "^15.0.0",
     "@angular/cdk": "^15.0.3",
