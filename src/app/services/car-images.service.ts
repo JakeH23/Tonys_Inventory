@@ -14,10 +14,9 @@ export class CarImagesService {
   constructor(private _http: HttpClient) { }
 
   getRandomCarImages(): Observable<any> {
-    //return this._http.get(`car-images`, { headers: this.headers });
     return this._http.get(`${this.baseUrl}car-images`, { headers: this.headers });
   }
-
+  
   uploadCarImage(data: FormData): Observable<CarImage> {
     //return this._http.post<CarImage>(`car-images/car`, data, { headers: this.headers });
     return this._http.post<CarImage>(`${this.baseUrl}car-images/car`, data, { headers: this.headers });
