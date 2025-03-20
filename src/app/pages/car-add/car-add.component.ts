@@ -6,7 +6,6 @@ import { CarService } from '../../services/car.service';
 import { CarImagesService } from '../../services/car-images.service';
 import { CarImage } from '../../../../src/app/components/carousel/carousel.interface';
 import { BoxedChoice } from '../../../../src/app/models/BoxedChoice';
-import * as config from '../../../../config/database';
 
 declare const window: any;
 
@@ -50,7 +49,7 @@ export class CarAddComponent implements OnInit {
     this.myWidget = window.cloudinary.createUploadWidget(
       {
         uploadPreset: "ml-default", //replace with your own upload preset
-        cloudName: config.cloudinary_cloud_name, //replace with your own cloud name
+        cloudName: "dlkgqdwtm", //replace with your own cloud name
         // cropping: true, //add a cropping step
         // showAdvancedOptions: true,  //add advanced options (public_id and tag)
         // sources: [ "local", "url"], // restrict the upload sources to URL and local files
