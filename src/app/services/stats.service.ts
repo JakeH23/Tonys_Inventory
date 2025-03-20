@@ -7,13 +7,13 @@ import { environment } from '../../../src/environments/environment';
   providedIn: 'root',
 })
 export class StatsService {
-  baseUrl = environment.baseUrl;
+  baseUrl = environment.baseUrl || "";
   headers = { 'Content-Type': 'application/json' };
 
   constructor(private _http: HttpClient) { }
 
   getAllStatistics(): Observable<any> {
-    return this._http.get(`statistics`, { headers: this.headers });
-    //return this._http.get(`${this.baseUrl}/statistics`, { headers: this.headers });
+    //return this._http.get(`statistics`, { headers: this.headers });
+    return this._http.get(`${this.baseUrl}statistics`, { headers: this.headers });
   }
 }

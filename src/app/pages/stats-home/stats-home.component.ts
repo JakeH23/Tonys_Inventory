@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { StatsService } from '../../services/stats.service';
 import { CarImage } from '../../components/carousel/carousel.interface';
@@ -8,6 +8,7 @@ import { CarImagesService } from '../../services/car-images.service';
   selector: 'app-stats-home',
   templateUrl: './stats-home.component.html',
   styleUrls: ['./stats-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsHomeComponent implements OnInit {
   cars: CarImage[] = [];
@@ -27,12 +28,14 @@ export class StatsHomeComponent implements OnInit {
   
   constructor(
     private _statsService: StatsService,
-    private _carImagesService: CarImagesService
+    private _carImagesService: CarImagesService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.getAllStatistics();
     this.getRandomCarImages();
+    this.cdr.detectChanges();
   }
 
   getAllStatistics() {
@@ -43,6 +46,7 @@ export class StatsHomeComponent implements OnInit {
         this.boxedTotal = res.statistics.boxedTotal; 
         this.unboxedTotal = res.statistics.unboxedTotal; 
         this.dataSource = new MatTableDataSource(res.statistics.mostExpensiveCars);
+        this.cdr.detectChanges();
       },
       error: console.log,
     });
@@ -52,6 +56,7 @@ export class StatsHomeComponent implements OnInit {
     this._carImagesService.getRandomCarImages().subscribe({
       next: (res) => {
         this.cars = res.carImages;
+        this.cdr.detectChanges();
       },
       error: console.log,
     });

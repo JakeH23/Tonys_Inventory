@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const cloudinary = require('cloudinary').v2;
+const compression = require('compression')
 
 mongoose.connect(config.database);
 // On Connection
@@ -25,6 +26,7 @@ cloudinary.config({
 });
 
 const app = express();
+app.use(compression())
 
 const cars = require('./routes/cars');
 const statistics = require('./routes/statistics');
