@@ -57,4 +57,7 @@
         <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
         <button mat-raised-button color="primary" type="submit">{{data ? 'Update': 'Save'}}</button>
     </div>
+    <button id="upload_widget" (click)="openWidget()" class="cloudinary-button">
+        Upload files
+      </button>
 </form>

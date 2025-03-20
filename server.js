@@ -4,21 +4,31 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./config/database');
+const cloudinary = require('cloudinary').v2;
 
 mongoose.connect(config.database);
 // On Connection
 mongoose.connection.on('connected', () => {
-  console.log('Connected to Database '+config.database);
+  console.log('Connected to Database ' + config.database);
 });
 // On Error
 mongoose.connection.on('error', (err) => {
-  console.log('Database error '+err);
+  console.log('Database error ' + err);
+});
+
+// Return "https" URLs by setting secure: true
+cloudinary.config({
+  secure: true,
+  cloud_name: config.cloudinary_cloud_name,
+  api_key: config.cloudinary_api_key,
+  api_secret: config.cloudinary_api_secret
 });
 
 const app = express();
 
 const cars = require('./routes/cars');
 const statistics = require('./routes/statistics');
+const carImages = require('./routes/car-images');
 
 // Port Number
 const port = process.env.PORT || 8080;
@@ -34,6 +44,7 @@ app.use(bodyParser.json());
 
 app.use('/', statistics);
 app.use('/cars', cars);
+app.use('/car-images', carImages);
 
 // Index Route
 // app.get('/', (req, res) => {
@@ -46,5 +57,5 @@ app.get('*', (req, res) => {
 
 // Start Server
 app.listen(port, () => {
-  console.log('Server started on port '+port);
+  console.log('Server started on port ' + port);
 });

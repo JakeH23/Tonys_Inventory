@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseUrl: "https://tonys-backend-production.up.railway.app"
+    baseUrl: "http://localhost:8080"
 };

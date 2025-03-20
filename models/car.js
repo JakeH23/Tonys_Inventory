@@ -25,8 +25,8 @@ const CarSchema = mongoose.Schema({
   Notes: {
     type: String
   },
-  ImageId: {
-    type: Number
+  Image: {
+    type: String
   }
 });
 

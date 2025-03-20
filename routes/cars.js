@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Car = require('../models/car');
+const config = require('../config/database');
 
 // Route to get all cars
 router.get('/', async (req, res, next) => {
@@ -14,9 +15,9 @@ router.get('/', async (req, res, next) => {
 
 // Route to get a car by ID
 router.get('/:id', async (req, res, next) => {
-  debugger;
   try {
     const car = await Car.getCarById(req.params.id);
+    car.Image = `https://res.cloudinary.com/${config.cloudinary_cloud_name}/image/upload/${car.Id}.png`;
     if (!car) {
       return res.status(404).json({ success: false, msg: 'Car not found' });
     }

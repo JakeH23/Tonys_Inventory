@@ -3,9 +3,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
-import { CarImagesService } from '../../../../src/app/services/car-images.service';
+import { CarImagesService } from '../../services/car-images.service';
 import { CarImage } from '../../../../src/app/components/carousel/carousel.interface';
 import { BoxedChoice } from '../../../../src/app/models/BoxedChoice';
+import * as config from '../../../../config/database';
+
+declare const window: any;
 
 @Component({
   selector: 'app-car-add',
@@ -20,6 +23,7 @@ export class CarAddComponent implements OnInit {
 
   image = '';
   boxedChoices: BoxedChoice[] = [{ label: "Yes", value: true }, { label: "No", value: false }];
+  myWidget: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -43,6 +47,33 @@ export class CarAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.carForm.patchValue(this.data);
+    this.myWidget = window.cloudinary.createUploadWidget(
+      {
+        uploadPreset: "ml-default", //replace with your own upload preset
+        cloudName: config.cloudinary_cloud_name, //replace with your own cloud name
+        // cropping: true, //add a cropping step
+        // showAdvancedOptions: true,  //add advanced options (public_id and tag)
+        // sources: [ "local", "url"], // restrict the upload sources to URL and local files
+        multiple: false,  //restrict upload to a single file
+        folder: "Cars", //upload files to the specified folder
+        // tags: ["users", "profile"], //add the given tags to the uploaded files
+        // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
+        //clientAllowedFormats: ["images"], //restrict uploading to image files only
+        maxImageFileSize: 700000,  //restrict file size to less than 700KB
+        // maxImageWidth: 2000, //Scales the image down to a width of 2000 pixels before uploading
+        // theme: "purple", //change to a purple theme
+      },
+      (error: any, result: any) => {
+        if (!error && result && result.event === "success") {
+          console.log("Done! Here is the image info: ", result.info);
+          document?.getElementById("uploadedimage")?.setAttribute("src", result.info.secure_url);
+        }
+      }
+    );
+  }
+
+  openWidget() {
+    this.myWidget.open();
   }
 
   onFormSubmit() {
@@ -77,8 +108,8 @@ export class CarAddComponent implements OnInit {
     formData.append("file", file);
     this._carImagesService.uploadCarImage(formData)
       .subscribe((result: CarImage) => {
-        this.image = result.image;
-        this.carForm.patchValue({ id: result.id })
+        this.image = result.Image;
+        this.carForm.patchValue({ id: result.Id })
       });
   }
 }

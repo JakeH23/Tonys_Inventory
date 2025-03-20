@@ -51,7 +51,7 @@ export class StatsHomeComponent implements OnInit {
   getRandomCarImages() {
     this._carImagesService.getRandomCarImages().subscribe({
       next: (res) => {
-        this.cars = res;
+        this.cars = res.carImages;
       },
       error: console.log,
     });

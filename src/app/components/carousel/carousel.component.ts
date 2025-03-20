@@ -43,7 +43,7 @@ export class CarouselComponent implements OnInit {
 
     preloadImages() {
         for (const car of this.cars) {
-            new Image().src = car.image;
+            new Image().src = car.Image;
         }
     }
 }

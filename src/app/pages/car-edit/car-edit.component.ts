@@ -46,7 +46,7 @@ export class CarEditComponent implements OnInit {
     this._carService.getCarById(this.id).subscribe({
       next: (res) => {
         this.carForm.patchValue(res);
-        this.image = res.image;
+        this.image = res.Image;
       },
       error: console.log,
     });
@@ -73,7 +73,7 @@ export class CarEditComponent implements OnInit {
     formData.append("file", file);
     this._carImagesService.updateCarImage(formData, this.id)
       .subscribe((result: CarImage) => {
-        this.image = result.image;
+        this.image = result.Image;
       });
   }
 }

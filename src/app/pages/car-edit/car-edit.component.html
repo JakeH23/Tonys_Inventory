@@ -50,7 +50,8 @@
                             No file uploaded yet.
                         </div>
                         <div *ngIf="image">
-                            <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Car Image" />
+                            <!-- <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Car Image" /> -->
+                            <img [src]="image" class="display-image" alt="Car Image" />
                         </div>
                         <button type="button" mat-mini-fab color="primary" class="upload-btn"
                             (click)="fileUpload.click()">            

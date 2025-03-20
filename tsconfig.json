@@ -22,6 +22,7 @@
             "ES2022",
             "dom"
         ],
+        "allowJs": true,
         "strictPropertyInitialization": false
     },
     "angularCompilerOptions": {

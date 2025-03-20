@@ -1,8 +1,8 @@
 <!-- carousel -->
 <div class="carousel">
     <ng-container *ngFor="let car of cars; let i = index">
-        <h3 *ngIf="i === currentSlide"><b>Car Showcase: ({{car.make}} - {{car.model}})</b></h3>
-        <img *ngIf="i === currentSlide" [src]="'data:image/png;base64,'+car.image" class="slide"
+        <h3 *ngIf="i === currentSlide"><b>Car Showcase: ({{car.Make}} - {{car.Model}})</b></h3>
+        <img *ngIf="i === currentSlide" [src]="car.Image" class="slide"
             [@slideAnimation]="animationType" alt="Car Image" />
     </ng-container>
 

@@ -9,19 +9,22 @@ import { environment } from 'src/environments/environment';
 })
 export class CarImagesService {
   baseUrl = environment.baseUrl;
-  headers = { 'Access-Control-Allow-Origin': '*'};
+  headers = { 'Content-Type': 'application/json'};
 
   constructor(private _http: HttpClient) { }
 
-  getRandomCarImages(): Observable<CarImage[]> {
-    return this._http.get<CarImage[]>(`${this.baseUrl}/api/CarImages`, { headers: this.headers });
+  getRandomCarImages(): Observable<any> {
+    return this._http.get(`car-images`, { headers: this.headers });
+    //return this._http.get(`${this.baseUrl}/car-images`, { headers: this.headers });
   }
 
   uploadCarImage(data: FormData): Observable<CarImage> {
-    return this._http.post<CarImage>(`${this.baseUrl}/api/CarImages`, data, { headers: this.headers });
+    return this._http.post<CarImage>(`car-images/car`, data, { headers: this.headers });
+    //return this._http.post<CarImage>(`${this.baseUrl}/car-images/car`, data, { headers: this.headers });
   }
 
   updateCarImage(data: FormData, id: number): Observable<CarImage> {
-    return this._http.put<CarImage>(`${this.baseUrl}/api/CarImages/${id}`, data, { headers: this.headers });
+    return this._http.put<CarImage>(`car-images/car/${id}`, data, { headers: this.headers });
+    //return this._http.put<CarImage>(`${this.baseUrl}/car-images/car/${id}`, data, { headers: this.headers });
   }
 }
