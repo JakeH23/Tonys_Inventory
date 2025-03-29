@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { StatsService } from '../../services/stats.service';
 import { CarImage } from '../../components/carousel/carousel.interface';
@@ -23,9 +23,9 @@ export class StatsHomeComponent implements OnInit {
     'manufacturersCode',
     'estimatedValue',
   ];
-  dataSource!: MatTableDataSource<any>; 
-  
-  
+  dataSource!: MatTableDataSource<any>;
+
+
   constructor(
     private _statsService: StatsService,
     private _carImagesService: CarImagesService,
@@ -41,10 +41,10 @@ export class StatsHomeComponent implements OnInit {
   getAllStatistics() {
     this._statsService.getAllStatistics().subscribe({
       next: (res) => {
-        this.totalCarsCount = res.statistics.totalCarsCount; 
-        this.totalCarsValue = res.statistics.totalCarsValue; 
-        this.boxedTotal = res.statistics.boxedTotal; 
-        this.unboxedTotal = res.statistics.unboxedTotal; 
+        this.totalCarsCount = res.statistics.totalCarsCount;
+        this.totalCarsValue = res.statistics.totalCarsValue;
+        this.boxedTotal = res.statistics.boxedTotal;
+        this.unboxedTotal = res.statistics.unboxedTotal;
         this.dataSource = new MatTableDataSource(res.statistics.mostExpensiveCars);
         this.cdr.detectChanges();
       },
@@ -60,5 +60,5 @@ export class StatsHomeComponent implements OnInit {
       },
       error: console.log,
     });
-  } 
+  }
 }

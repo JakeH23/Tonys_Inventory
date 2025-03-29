@@ -42,7 +42,7 @@
                             No file uploaded yet.
                         </div>
                         <div *ngIf="image">
-                            <img [src]="'data:image/png;base64,'+image" class="thumbnail" alt="Car Image"/>
+                            <img [src]="image" class="thumbnail" alt="Car Image"/>
                         </div>
                         <button type="button" mat-mini-fab color="primary" class="upload-btn"
                             (click)="fileUpload.click()">            
@@ -57,7 +57,4 @@
         <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
         <button mat-raised-button color="primary" type="submit">{{data ? 'Update': 'Save'}}</button>
     </div>
-    <button id="upload_widget" (click)="openWidget()" class="cloudinary-button">
-        Upload files
-      </button>
 </form>

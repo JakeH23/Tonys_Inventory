@@ -7,8 +7,6 @@ import { CarImagesService } from '../../services/car-images.service';
 import { CarImage } from '../../../../src/app/components/carousel/carousel.interface';
 import { BoxedChoice } from '../../../../src/app/models/BoxedChoice';
 
-declare const window: any;
-
 @Component({
   selector: 'app-car-add',
   templateUrl: './car-add.component.html',
@@ -22,7 +20,6 @@ export class CarAddComponent implements OnInit {
 
   image = '';
   boxedChoices: BoxedChoice[] = [{ label: "Yes", value: true }, { label: "No", value: false }];
-  myWidget: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -46,33 +43,6 @@ export class CarAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.carForm.patchValue(this.data);
-    this.myWidget = window.cloudinary.createUploadWidget(
-      {
-        uploadPreset: "ml-default", //replace with your own upload preset
-        cloudName: "dlkgqdwtm", //replace with your own cloud name
-        // cropping: true, //add a cropping step
-        // showAdvancedOptions: true,  //add advanced options (public_id and tag)
-        // sources: [ "local", "url"], // restrict the upload sources to URL and local files
-        multiple: false,  //restrict upload to a single file
-        folder: "Cars", //upload files to the specified folder
-        // tags: ["users", "profile"], //add the given tags to the uploaded files
-        // context: {alt: "user_uploaded"}, //add the given context data to the uploaded files
-        //clientAllowedFormats: ["images"], //restrict uploading to image files only
-        maxImageFileSize: 700000,  //restrict file size to less than 700KB
-        // maxImageWidth: 2000, //Scales the image down to a width of 2000 pixels before uploading
-        // theme: "purple", //change to a purple theme
-      },
-      (error: any, result: any) => {
-        if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
-          document?.getElementById("uploadedimage")?.setAttribute("src", result.info.secure_url);
-        }
-      }
-    );
-  }
-
-  openWidget() {
-    this.myWidget.open();
   }
 
   onFormSubmit() {
@@ -101,14 +71,21 @@ export class CarAddComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     const file: File = event.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    this._carImagesService.uploadCarImage(formData)
-      .subscribe((result: CarImage) => {
-        this.image = result.Image;
-        this.carForm.patchValue({ id: result.Id })
+    // Subscribe to getNextCarId to get the next car ID
+    this._carImagesService.uploadCarImage(await this.toBase64(file))
+      .subscribe((result: { src: string; alt: string }) => {
+        this.image = result.src;
+        this.carForm.patchValue({ id: result.alt }); // Update the form with the image ID
       });
   }
+
+  toBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
 }

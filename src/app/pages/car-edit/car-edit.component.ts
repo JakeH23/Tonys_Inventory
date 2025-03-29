@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
 import { ActivatedRoute } from '@angular/router';
 import { CarImagesService } from 'src/app/services/car-images.service';
-import { CarImage } from 'src/app/components/carousel/carousel.interface';
 
 @Component({
   selector: 'app-car-edit',
   templateUrl: './car-edit.component.html',
   styleUrls: ['./car-edit.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarEditComponent implements OnInit {
   carForm: FormGroup;
@@ -21,7 +21,8 @@ export class CarEditComponent implements OnInit {
     private _carService: CarService,
     private _coreService: CoreService,
     private route: ActivatedRoute,
-    private _carImagesService: CarImagesService
+    private _carImagesService: CarImagesService,
+    private cdr: ChangeDetectorRef
   ) {
     this.route.params.subscribe(params => {
       this.id = params['id'];
@@ -67,13 +68,20 @@ export class CarEditComponent implements OnInit {
     }
   }
 
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     const file: File = event.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    this._carImagesService.updateCarImage(formData, this.id)
-      .subscribe((result: CarImage) => {
-        this.image = result.Image;
+    this._carImagesService.updateCarImage(await this.toBase64(file), this.id)
+      .subscribe((result: { src: string }) => {
+        this.image = result.src;
+        this.cdr.detectChanges();
       });
   }
+
+  toBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
 }
