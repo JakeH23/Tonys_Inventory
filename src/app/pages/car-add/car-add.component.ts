@@ -30,14 +30,14 @@ export class CarAddComponent implements OnInit {
     private _coreService: CoreService
   ) {
     this.carForm = this._fb.group({
-      id: '',
-      manufacturersCode: '',
-      make: '',
-      model: '',
-      estimatedValue: 0,
-      boxed: false,
-      notes: '',
-      thumbnail: ''
+      Id: '',
+      ManufacturersCode: '',
+      Make: '',
+      Model: '',
+      EstimatedValue: 0,
+      Boxed: false,
+      Notes: '',
+      Image: ''
     });
   }
 
@@ -47,11 +47,11 @@ export class CarAddComponent implements OnInit {
 
   onFormSubmit() {
     if (this.carForm.valid) {
-      if (this.carForm.controls['id'].value != '') {
-        this._carService.updateCar(this.carForm.controls['id'].value, this.carForm.value).subscribe({
+      if (this.carForm.controls['Id'].value != '') {
+        this._carService.updateCar(this.carForm.controls['Id'].value, this.carForm.value).subscribe({
           next: () => {
             this._coreService.openSnackBar('Car added successfully');
-            this._dialogRef.close(this.carForm.controls['id'].value);
+            this._dialogRef.close(this.carForm.controls['Id'].value);
           },
           error: (err: any) => {
             console.error(err);
@@ -77,7 +77,7 @@ export class CarAddComponent implements OnInit {
     this._carImagesService.uploadCarImage(await this.toBase64(file))
       .subscribe((result: { src: string; alt: string }) => {
         this.image = result.src;
-        this.carForm.patchValue({ id: result.alt }); // Update the form with the image ID
+        this.carForm.patchValue({ Id: result.alt }); // Update the form with the image ID
       });
   }
 

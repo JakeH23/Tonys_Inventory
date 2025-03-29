@@ -42,25 +42,25 @@ router.put('/:id', async (req, res, next) => {
 
 // Route to add a new car
 router.post('/', async (req, res, next) => {
-  const cars = await Car.getAllCars();
-  const id = cars.length + 1;
-  const newCar = new Car({  
-    Id: id,
-    ManufacturersCode: req.body.manufacturersCode,
-    Make: req.body.make,
-    Model: req.body.model,
-    EstimatedValue: req.body.estimatedValue,
-    Boxed: req.body.boxed,
-    Notes: req.body.notes,
-    ImageId: id
-  });
-
   try {
-    const car = await Car.addCar(newCar);
+    // Fetch all cars to calculate the new ID
+    const cars = await Car.getAllCars();
+    const id = cars.length + 1; 
+    const newCar = new Car({
+      Id: id,
+      ManufacturersCode: req.body.ManufacturersCode,
+      Make: req.body.Make,
+      Model: req.body.Model,
+      EstimatedValue: req.body.EstimatedValue,
+      Boxed: req.body.Boxed,
+      Notes: req.body.Notes
+    });
+
+    // Save the new car to the database
+    await Car.addCar(newCar);
     res.json({ success: true, msg: 'Car added', id });
   } catch (err) {
     res.status(500).json({ success: false, msg: 'Failed to add car', error: err });
   }
 });
-
 module.exports = router;

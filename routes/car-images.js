@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => {
   const cars = await Car.getAllCars();
   const id = (cars.length + 1).toString();
   cloudinary.uploader
-    .upload(req.body.data, { folder: "Cars", public_id: id })
+    .upload(req.body.data, { asset_folder: "Cars", public_id: id, use_asset_folder_as_public_id_prefix: false, overwrite: true, unique_filename: false, invalidate: true })
     .then((result) => {
       res.json({ src: result.secure_url, alt: result.public_id.split('/').pop() });
     })
@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   cloudinary.uploader.destroy(req.params.id);
   cloudinary.uploader
-    .upload(req.body.data, { asset_folder: "Cars", use_asset_folder_as_public_id_prefix: false, public_id: req.params.id, overwrite: true, unique_filename: false, invalidate: true })
+    .upload(req.body.data, { asset_folder: "Cars", public_id: req.params.id, use_asset_folder_as_public_id_prefix: false, overwrite: true, unique_filename: false, invalidate: true })
     .then((result) => {
       res.json({ src: result.secure_url });
     })
