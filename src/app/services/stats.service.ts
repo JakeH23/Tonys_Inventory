@@ -15,4 +15,8 @@ export class StatsService {
   getAllStatistics(): Observable<any> {
     return this._http.get(`${this.baseUrl}statistics`, { headers: this.headers });
   }
+
+  getCarCount(): Observable<any> {
+    return this._http.get(`${this.baseUrl}statistics/count`, { headers: this.headers });
+  }
 }

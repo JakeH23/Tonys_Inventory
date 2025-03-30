@@ -1,0 +1,13 @@
+<cdk-virtual-scroll-viewport itemSize="300" class="gallery-grid">
+  <div class="gallery-row" *cdkVirtualFor="let row of groupedCarsArray">
+    <div class="gallery-item" *ngFor="let id of row">
+      <a [routerLink]="['/cars', id]">
+        <img 
+          loading="lazy" 
+          src="https://res.cloudinary.com/dlkgqdwtm/image/upload/{{id}}.png" 
+          alt="Car {{ id }}" 
+        />
+      </a>
+    </div>
+  </div>
+</cdk-virtual-scroll-viewport>

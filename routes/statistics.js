@@ -12,4 +12,13 @@ router.get('/statistics', (req, res, next) => {
   });
 });
 
+router.get('/statistics/count', async (req, res, next) => {
+  try {
+    const count = await Statistic.getAllCarsCount();
+    res.json(count);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

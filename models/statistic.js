@@ -23,3 +23,7 @@ module.exports.getAllStatistics = async (callback) => {
     callback(err, null);
   }
 };
+
+module.exports.getAllCarsCount = () => {
+  return Car.countDocuments({});
+};

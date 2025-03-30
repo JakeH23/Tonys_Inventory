@@ -14,6 +14,8 @@ import { CarEditComponent } from './pages/car-edit/car-edit.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AppMaterialModule } from './shared/app-material.module';
 import { PartsComponent } from './pages/parts/parts.component';
+import { GalleryComponent } from './pages/gallery/gallery.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { PartsComponent } from './pages/parts/parts.component';
     StatsHomeComponent,
     CarouselComponent,
     CarEditComponent,
-    PartsComponent
+    PartsComponent,
+    GalleryComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import { PartsComponent } from './pages/parts/parts.component';
     AppMaterialModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent],
