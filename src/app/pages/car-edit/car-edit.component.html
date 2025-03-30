@@ -53,7 +53,7 @@
                             <!-- <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Car Image" /> -->
                             <img [src]="image" class="display-image" alt="Car Image" />
                         </div>
-                        <button type="button" mat-mini-fab color="primary" class="upload-btn"
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn lime-btn"
                             (click)="fileUpload.click()">            
                             <mat-icon>attach_file</mat-icon>
                         </button>
@@ -63,7 +63,7 @@
         </div>
         <div class="row action">
             <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
-            <button mat-raised-button color="primary" type="submit">Update</button>
+            <button mat-raised-button class="lime-btn" type="submit">Update</button>
         </div>
     </form>
 </div>

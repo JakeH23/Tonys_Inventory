@@ -59,6 +59,12 @@
   width: 100%;
 }
 
+.lime-btn {
+  background-color: lime !important; /* Lime background */
+  color: black !important; /* Black font color */
+  text-transform: none; /* Prevent uppercase text */
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .column {
