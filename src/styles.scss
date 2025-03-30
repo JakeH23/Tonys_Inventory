@@ -6,17 +6,17 @@ body {
     font-family: Oswald, sans-serif !important;
 }
 
-// .col {
-//     background: black !important;
-//     color: lime !important;
-//     border: none !important;
-// }
+.col {
+    background: black !important;
+    color: lime !important;
+    border: none !important;
+}
 
-// .card {
-//     color: white !important;
-//     background: black !important;
-//     border: 2px lime solid !important;
-// }
+.card {
+    color: white !important;
+    background: black !important;
+    border: 2px lime solid !important;
+}
 
 body {
     margin: 0;
@@ -29,23 +29,23 @@ body {
     font-family: Oswald, sans-serif !important;
 }
 
-// .navbar-color {
-//     background-color: black;
-//     color: white;
-// }
+.navbar-color {
+    background-color: black;
+    color: white;
+}
 
-// .router-link-active {
-//     background-color: #414548;
-// }
+.router-link-active {
+    background-color: #414548;
+}
 
 .no-border {
     border-radius: 0px;
 }
 
-// .toolbar-color {
-//     background-color: #616466;
-//     color: white;
-// }
+.toolbar-color {
+    background-color: #616466;
+    color: white;
+}
 
 .center {
     margin-left: auto;
@@ -59,10 +59,6 @@ body {
 
 .txt-bold {
     font-weight: bold;
-}
-
-.selected {
-    background-color: gainsboro;
 }
 
 .example-spacer {
@@ -95,40 +91,53 @@ label {
     margin-bottom: 0 !important;
 }
 
-// .custom-button {
-//     background: lime !important;
-//     border: lime 2px !important;
-// }
+.selected {
+    font-weight: bold; /* Highlight the active route */
+    color: #1976d2; /* Change color for active state */
+}
 
-// .custom-nav-button {
-//     color: lime !important;
-// }
+.custom-button {
+    background: lime !important;
+    border: none !important; /* Remove any border if needed */
+    margin-right: 8px !important;; /* Add spacing between buttons */
+    text-transform: none; /* Prevent uppercase text */
+    color: black !important;; /* Set font color to black */
+}
 
-// .mat-mdc-table {
-//     background: black;
-// }
+.custom-nav-button {
+    color: lime !important;
+    color: black !important;; /* Set icon color to black */
+}
 
-// .table-container {
-//     border: 2px lime solid;
-// }
+.mat-mdc-table {
+    background: black;
+}
 
-// .mdc-data-table__cell,
-// .mdc-data-table__header-cell {
-//     color: white;
-// }
+.table-container {
+    border: 2px lime solid;
+}
 
-// .mat-drawer-content, .mat-typography, .mat-mdc-paginator-outer-container{
-//     background: black;
-// }
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+    color: white;
+}
 
-// .mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-actions{
-//     color: lime;
-// }
+.mat-drawer-content, .mat-typography, .mat-mdc-paginator-outer-container{
+    background: black;
+}
 
-// .mat-mdc-text-field-wrapper, .mat-mdc-icon-button svg{
-//     background: lime;
-// }
+.mat-mdc-paginator-page-size-label, .mat-mdc-paginator-range-actions{
+    color: lime;
+}
 
-// .mat-mdc-dialog-container .mdc-dialog__surface{
-//     background: lime;
-// }
+.mat-mdc-text-field-wrapper, .mat-mdc-icon-button svg{
+    background: lime;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface{
+    background: lime;
+}
+
+.mat-icon {
+    color: black !important; /* Ensure all mat-icons are black */
+}

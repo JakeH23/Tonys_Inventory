@@ -1,4 +1,44 @@
-.nav-image-header{
-    height: auto;
-    width: 100%;
+.nav-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent overflow */
+    height: 100%; /* Full height of the navbar */
+    margin-right: 16px; /* Add spacing between the image and the partition line */
+}
+
+.partition-line {
+    width: 1px; /* Thin vertical line */
+    height: 60%; /* Adjust height as needed */
+    background-color: #ccc; /* Light gray color for the line */
+    margin-right: 16px; /* Add spacing between the line and the buttons */
+}
+
+.left-buttons {
+    display: flex;
+    align-items: center;
+    margin-right: auto; /* Push the buttons to the left */
+}
+
+.mat-toolbar {
+    height: 80px; /* Adjust the height of the navbar */
+    display: flex;
+    align-items: center;
+}
+
+.nav-image-link {
+    display: flex; /* Ensure the link behaves like a container for the image */
+    align-items: center; /* Center the image vertically within the link */
+    justify-content: center; /* Center the image horizontally within the link */
+    text-decoration: none; /* Remove underline from the link */
+    height: 100%; /* Match the height of the container */
+    width: auto; /* Allow the width to adjust based on the image */
+}
+
+.nav-image-header {
+    max-width: 100%; /* Scale down to fit container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 80%; /* Limit the height of the image */
+    object-fit: contain; /* Ensure the image fits within its box */
+    display: block; /* Ensure the image behaves as a block element */
 }
