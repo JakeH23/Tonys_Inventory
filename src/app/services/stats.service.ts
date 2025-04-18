@@ -13,10 +13,10 @@ export class StatsService {
   constructor(private _http: HttpClient) { }
 
   getAllStatistics(): Observable<any> {
-    return this._http.get(`${this.baseUrl}statistics`, { headers: this.headers });
+    return this._http.get(`${this.baseUrl}api/statistics`, { headers: this.headers });
   }
 
   getCarCount(): Observable<any> {
-    return this._http.get(`${this.baseUrl}statistics/count`, { headers: this.headers });
+    return this._http.get(`${this.baseUrl}api/statistics/count`, { headers: this.headers });
   }
 }

@@ -24,7 +24,7 @@ export class CarsComponent implements OnInit {
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
-
+  allData: any[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -53,6 +53,7 @@ export class CarsComponent implements OnInit {
   getCarList() {
     this._carService.getCarList().subscribe({
       next: (res) => {
+        this.allData = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -68,6 +69,16 @@ export class CarsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  filterBoxed(isBoxed: boolean): void {
+    this.dataSource.data = this.allData; // Reset to original data
+    this.dataSource.data = this.dataSource.data.filter(car => car.Boxed === isBoxed);
+  }
+
+  filterRecentlyAdded(): void {
+    this.dataSource.data = this.allData; // Reset to original data
+    this.dataSource.data = this.dataSource.data.sort((a, b) => b.Id - a.Id); // Sort by descending ID
   }
 
   navigateToId(id: number){

@@ -44,9 +44,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ extended: true, limit: '50mb'}));
 
-app.use('/', statistics);
-app.use('/cars', cars);
-app.use('/car-images', carImages);
+app.use('/api/', statistics);
+app.use('/api/cars', cars);
+app.use('/api/car-images', carImages);
 
 // Index Route
 // app.get('/', (req, res) => {

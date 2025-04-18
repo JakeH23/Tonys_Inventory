@@ -15,9 +15,6 @@ export class GalleryComponent implements OnInit {
     private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // this.carsArray = [1, 2, 3, 4, 5, 6, 7, 8];
-    // this.groupedCarsArray = this.groupIntoRows(this.carsArray, 4); // Group into rows of 4
-
     this.statsService.getCarCount().subscribe({
       next: (count: number) => {
         this.carsArray = Array.from({ length: count }, (_, i) => i + 1);

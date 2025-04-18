@@ -13,14 +13,14 @@ export class CarImagesService {
   constructor(private _http: HttpClient) { }
 
   getRandomCarImages(): Observable<any> {
-    return this._http.get(`${this.baseUrl}car-images`, { headers: this.headers });
+    return this._http.get(`${this.baseUrl}api/car-images`, { headers: this.headers });
   }
 
   uploadCarImage(file: string): Observable<any> {
-    return this._http.post(`${this.baseUrl}car-images`, { data: file }, { headers: this.headers });
+    return this._http.post(`${this.baseUrl}api/car-images`, { data: file }, { headers: this.headers });
   }
 
   updateCarImage(file: string, id: number): Observable<any> {
-    return this._http.put(`${this.baseUrl}car-images/${id}`, { data: file }, { headers: this.headers });
+    return this._http.put(`${this.baseUrl}api/car-images/${id}`, { data: file }, { headers: this.headers });
   }
 }
