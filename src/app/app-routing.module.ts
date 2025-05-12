@@ -5,6 +5,7 @@ import { StatsHomeComponent } from './pages/stats-home/stats-home.component';
 import { CarEditComponent } from './pages/car-edit/car-edit.component';
 import { PartsComponent } from './pages/parts/parts.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
+import { PartEditComponent } from './pages/part-edit/part-edit.component';
 
 @NgModule({
   imports: [RouterModule.forRoot([
@@ -12,6 +13,7 @@ import { GalleryComponent } from './pages/gallery/gallery.component';
     { path: 'cars', component: CarsComponent },
     { path: 'cars/:id', component: CarEditComponent },
     { path: 'parts', component: PartsComponent },
+    { path: 'parts/:id', component: PartEditComponent },
     { path: 'gallery', component: GalleryComponent }
   ])],
   exports: [RouterModule]

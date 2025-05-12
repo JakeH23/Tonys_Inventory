@@ -6,6 +6,7 @@
   padding-top: 20px;
   margin: 0 auto;
   max-width: 1348px;
+
   mat-form-field {
     width: 100%;
   }
@@ -16,17 +17,10 @@
   gap: 5px;
 }
 
-.check-circle{
-  color: green;
+.check-circle {
+  color: green !important;
 }
 
-.cancel{
-  color: red;
-}
-
-.holding-image{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 25%;
+.cancel {
+  color: red !important;
 }

@@ -1,5 +1,98 @@
 <div class="main-body">
-  <h1 style="text-align: center; font-size: 50px;">COMING SOON</h1>
-  <img class="holding-image" src="https://www.animatedimages.org/data/media/1044/animated-car-mechanic-image-0013.gif"
-    border="0" alt="animated-car-mechanic-image-0013" />
+
+  <!-- Filter Input -->
+  <div class="filter-container" style="display: flex; gap: 16px; align-items: center;">
+    <mat-form-field style="flex: 1;">
+      <mat-label>Filter All</mat-label>
+      <input matInput #filterInput (keyup)="applyFilter($event)" placeholder="Ex. E-1000, 9-3, 9600183R, damaged"
+        #input>
+    </mat-form-field>
+
+    <mat-form-field style="flex: 1;">
+      <mat-label>Category</mat-label>
+      <mat-select [(value)]="selectedCategory" (selectionChange)="filterByCategory()">
+        <mat-option value="Ext Electrical">Ext Electrical</mat-option>
+        <mat-option value="Ext Bodywork">Ext Bodywork</mat-option>
+        <mat-option value="Ext Mechanical">Ext Mechanical</mat-option>
+        <mat-option value="Int Electrical">Int Electrical</mat-option>
+        <mat-option value="Int Trim">Int Trim</mat-option>
+        <mat-option value="Int Mechanical">Int Mechanical</mat-option>
+        <mat-option value="Engine">Engine</mat-option>
+        <mat-option value="Gearbox Drivetrain">Gearbox Drivetrain</mat-option>
+        <mat-option value="Brakes">Brakes</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field style="flex: 1;">
+      <mat-label>Vehicle Side</mat-label>
+      <mat-select [(value)]="selectedVehicleSide" (selectionChange)="filterByVehicleSide()">
+        <mat-option value="">None</mat-option>
+        <mat-option value="All">All</mat-option>
+        <mat-option value="N/S">N/S</mat-option>
+        <mat-option value="O/S">O/S</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" style="display: flex; align-items: center; gap: 8px; margin-bottom: 25px;"
+      (click)="clearFilters()">
+      <mat-icon>clear_all</mat-icon>
+      Clear All Filters
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Columns (unchanged) -->
+      <ng-container matColumnDef="catalogNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Catalog Number </th>
+        <td mat-cell *matCellDef="let row"> {{row.CatalogNumber}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let row"> {{row.Category}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="modelNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Model Number </th>
+        <td mat-cell *matCellDef="let row"> {{row.ModelNumber}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="partNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Part Number </th>
+        <td mat-cell *matCellDef="let row"> {{row.PartNumber}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="vehicleSide">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Vehicle Side </th>
+        <td mat-cell *matCellDef="let row"> {{row.VehicleSide}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+        <td mat-cell *matCellDef="let row"> {{row.Description}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Edit </th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="navigateToId(row.Id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{filterInput?.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of parts"></mat-paginator>
+  </div>
 </div>

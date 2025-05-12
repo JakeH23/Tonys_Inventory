@@ -30,6 +30,8 @@ app.use(compression())
 const cars = require('./routes/cars');
 const statistics = require('./routes/statistics');
 const carImages = require('./routes/car-images');
+const parts = require('./routes/parts');
+const partImages = require('./routes/part-images');
 
 // Port Number
 const port = process.env.PORT || 8080;
@@ -47,7 +49,8 @@ app.use(express.urlencoded({ extended: true, limit: '50mb'}));
 app.use('/api/', statistics);
 app.use('/api/cars', cars);
 app.use('/api/car-images', carImages);
-
+app.use('/api/parts', parts);
+app.use('/api/part-images', partImages);
 // Index Route
 // app.get('/', (req, res) => {
 //   res.send('invaild endpoint');

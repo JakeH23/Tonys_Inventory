@@ -1,0 +1,100 @@
+<div class="main-body">
+    <form [formGroup]="partForm" (ngSubmit)="onFormSubmit()">
+        <div class="row">
+            <div class="column form-column">
+                <div class="row">
+                    <div class="column">
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Catalog Number</mat-label>
+                            <input matInput type="text" placeholder="Ex. E-1000" formControlName="CatalogNumber">
+                        </mat-form-field>
+                    </div>
+                    <div class="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Category</mat-label>
+                            <mat-select formControlName="Category">
+                                <mat-option value="Ext Electrical">Ext Electrical</mat-option>
+                                <mat-option value="Ext Bodywork">Ext Bodywork</mat-option>
+                                <mat-option value="Ext Mechanical">Ext Mechanical</mat-option>
+                                <mat-option value="Int Electrical">Int Electrical</mat-option>
+                                <mat-option value="Int Trim">Int Trim</mat-option>
+                                <mat-option value="Int Mechanical">Int Mechanical</mat-option>
+                                <mat-option value="Engine">Engine</mat-option>
+                                <mat-option value="Gearbox Drivetrain">Gearbox Drivetrain</mat-option>
+                                <mat-option value="Brakes">Brakes</mat-option>
+                                <mat-option value="Other">Other</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Vehicle Side</mat-label>
+                            <mat-select formControlName="VehicleSide">
+                                <mat-option value="">None</mat-option>
+                                <mat-option value="All">All</mat-option>
+                                <mat-option value="N/S">N/S</mat-option>
+                                <mat-option value="O/S">O/S</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Model Number</mat-label>
+                            <mat-select formControlName="ModelNumber">
+                                <mat-option value="">None</mat-option>
+                                <mat-option value="All">All</mat-option>
+                                <mat-option value="9-3">9-3</mat-option>
+                                <mat-option value="9-5">9-5</mat-option>
+                                <mat-option value="900">900</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Part Number</mat-label>
+                            <input matInput type="text" placeholder="Ex. 9600183R" formControlName="PartNumber">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Description</mat-label>
+                        <textarea rows="3" matInput placeholder="Ex. Electric Wing Mirror"
+                            formControlName="Description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Notes</mat-label>
+                        <textarea rows="3" matInput placeholder="Ex. 4" formControlName="Notes"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="column image-column">
+                <div class="row pt-2 ml-0">
+                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                    <div class="file-upload">
+                        <div *ngIf="!image">
+                            No file uploaded yet.
+                        </div>
+                        <div *ngIf="image">
+                            <!-- <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Part Image" /> -->
+                            <img [src]="image" class="display-image" alt="Part Image" />
+                        </div>
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn lime-btn"
+                            (click)="fileUpload.click()">
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row action">
+            <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
+            <button mat-raised-button class="lime-btn" type="submit">Update</button>
+        </div>
+    </form>
+</div>

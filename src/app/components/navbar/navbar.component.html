@@ -1,6 +1,7 @@
 <div fxLayout="column" fxFlexFill>
-    <mat-toolbar class="navbar-color mat-elevation-z8 p-0" fxLayout="row" fxLayoutAlign="space-between center" style="width: 100%; z-index: 2">
-        
+    <mat-toolbar class="navbar-color mat-elevation-z8 p-0" fxLayout="row" fxLayoutAlign="space-between center"
+        style="width: 100%; z-index: 2">
+
         <!-- Left Image -->
         <div fxFlex="none" fxLayout="row" fxLayoutAlign="start center" class="nav-image-container">
             <a routerLink="/" class="nav-image-link">
@@ -16,21 +17,27 @@
             <button mat-button routerLink="/" routerLinkActive="selected no-border txt-bold" class="custom-button">
                 <mat-icon class="custom-nav-button">home</mat-icon>Home
             </button>
-            <button mat-button routerLink="/cars" routerLinkActive="selected no-border txt-bold" class="custom-button mr-2">
+            <button mat-button routerLink="/cars" routerLinkActive="selected no-border txt-bold"
+                class="custom-button mr-2">
                 <mat-icon class="custom-button">directions_car</mat-icon>Slot Cars
             </button>
-            <button mat-button routerLink="/gallery" routerLinkActive="selected no-border txt-bold" class="custom-button mr-2">
+            <button mat-button routerLink="/gallery" routerLinkActive="selected no-border txt-bold"
+                class="custom-button mr-2">
                 <mat-icon class="custom-button">image</mat-icon>Car Gallery
             </button>
-            <button mat-button routerLink="/parts" routerLinkActive="selected no-border txt-bold" class="custom-button mr-2">
+            <button mat-button routerLink="/parts" routerLinkActive="selected no-border txt-bold"
+                class="custom-button mr-2">
                 <mat-icon class="custom-button">build</mat-icon>Parts
             </button>
         </div>
 
         <!-- Right Button -->
         <div fxFlex="none" fxLayout="row" fxLayoutAlign="end center">
-            <button mat-raised-button class="custom-button mr-2" (click)="openAddEditCarForm()">
+            <button mat-raised-button class="custom-button mr-2" (click)="openAddCarForm()">
                 ADD CAR
+            </button>
+            <button mat-raised-button class="custom-button mr-2" (click)="openAddPartForm()">
+                ADD PARTS
             </button>
         </div>
     </mat-toolbar>
