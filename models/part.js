@@ -38,8 +38,8 @@ const PartSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  Image: {
-    type: String,
+  Images: {
+    type: Array,
     required: false
   }
 });

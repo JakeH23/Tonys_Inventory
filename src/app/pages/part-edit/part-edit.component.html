@@ -77,17 +77,25 @@
                 <div class="row pt-2 ml-0">
                     <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
                     <div class="file-upload">
-                        <div *ngIf="!image">
-                            No file uploaded yet.
+                        <div *ngIf="!partForm.get('Images')?.value || partForm.get('Images')?.value.length === 0">
+                            No files uploaded yet.
                         </div>
-                        <div *ngIf="image">
-                            <!-- <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Part Image" /> -->
-                            <img [src]="image" class="display-image" alt="Part Image" />
+                        <div *ngIf="partForm.get('Images')?.value && partForm.get('Images')?.value.length > 0"
+                            class="image-gallery">
+                            <div *ngFor="let image of partForm.get('Images')?.value" class="image-item">
+                                <img [src]="image" class="thumbnail" alt="Part Image" tabindex="0" 
+                                     (click)="openImagePopOut(image)" (keydown.enter)="openImagePopOut(image)"/>
+                            </div>
                         </div>
                         <button type="button" mat-mini-fab color="primary" class="upload-btn lime-btn"
                             (click)="fileUpload.click()">
                             <mat-icon>attach_file</mat-icon>
                         </button>
+                    </div>
+                </div>
+                <div *ngIf="selectedImage" class="image-popout" tabindex="0" (click)="closeImagePopOut()" (keydown)="closeImagePopOut()">
+                    <div class="image-popout-content">
+                        <img [src]="selectedImage" alt="Expanded Part Image" />
                     </div>
                 </div>
             </div>

@@ -98,3 +98,42 @@
     font-size: 12px !important;
   }
 }
+
+.thumbnail {
+  width: 100%;
+  height: 150px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+/* Pop-Out Modal Styles */
+.image-popout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.image-popout-content {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.image-popout-content img {
+  width: 100%;
+  height: 400px;
+  border-radius: 8px;
+}

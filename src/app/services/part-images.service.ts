@@ -20,7 +20,7 @@ export class PartImagesService {
     return this._http.post(`${this.baseUrl}api/part-images`, { data: file }, { headers: this.headers });
   }
 
-  updatePartImage(file: string, catalogNumber: string): Observable<any> {
-    return this._http.put(`${this.baseUrl}api/part-images/${catalogNumber}`, { data: file }, { headers: this.headers });
+  updatePartImage(file: string, catalogNumber: string, imageCount: number): Observable<any> {
+    return this._http.put(`${this.baseUrl}api/part-images/${catalogNumber}/${imageCount}`, { data: file }, { headers: this.headers });
   }
 }

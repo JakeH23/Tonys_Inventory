@@ -14,7 +14,7 @@ import { PartImagesService } from 'src/app/services/part-images.service';
 export class PartEditComponent implements OnInit {
   partForm: FormGroup;
   id: number;
-  image = "";
+  selectedImage: string | null = null; // Store the currently selected image for the pop-out view
 
   constructor(
     private _fb: FormBuilder,
@@ -36,7 +36,7 @@ export class PartEditComponent implements OnInit {
       VehicleSide: '',
       Description: '',
       Notes: '',
-      Images: 0
+      Images: []
     });
   }
 
@@ -48,7 +48,6 @@ export class PartEditComponent implements OnInit {
     this._partService.getPartById(this.id).subscribe({
       next: (res) => {
         this.partForm.patchValue(res);
-        this.image = res.Image;
       },
       error: console.log,
     });
@@ -71,9 +70,13 @@ export class PartEditComponent implements OnInit {
 
   async onFileSelected(event: any): Promise<void> {
     const file: File = event.target.files[0];
-    this._partImagesService.updatePartImage(await this.toBase64(file), this.partForm.value.CatalogNumber)
+    const imageCount = this.partForm.value.Images.length;
+    this._partImagesService.updatePartImage(await this.toBase64(file), this.partForm.value.CatalogNumber, imageCount)
       .subscribe((result: { src: string }) => {
-        this.image = result.src;
+        const updatedImages = [...this.partForm.value.Images, result.src];
+        this.partForm.patchValue({ Images: updatedImages });
+        this.cdr.detectChanges();
+        this.onFormSubmit();
         this.cdr.detectChanges();
       });
   }
@@ -85,4 +88,12 @@ export class PartEditComponent implements OnInit {
       reader.onload = () => resolve(reader.result as string)
       reader.onerror = (error) => reject(error)
     })
+
+  openImagePopOut(image: string): void {
+    this.selectedImage = image; // Set the selected image for the pop-out view
+  }
+
+  closeImagePopOut(): void {
+    this.selectedImage = null; // Clear the selected image to close the pop-out view
+  }
 }
