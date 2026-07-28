@@ -31,4 +31,12 @@
         "strictInputAccessModifiers": true,
         "strictTemplates": true
     }
+    ,
+    "exclude": [
+        "node_modules",
+        "dist",
+        "out-tsc",
+        "**/*.spec.ts",
+        "**/*.test.ts"
+    ]
 }
