@@ -57,11 +57,10 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Restore state from query params or cached state
-    const cached = this.stateService.snapshot;
-
     // Subscribe to route query params so back/forward triggers update
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const cached = this.stateService.snapshot;
+
       // If query params exist use them, otherwise fallback to cached state
       const qp = this.parseQueryParams(params);
       this.filterValue = qp.filter ?? cached.filter ?? '';
@@ -73,17 +72,16 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       // If cached data exists and query params match, reuse it
       const cachedData = cached.data;
       const cachedMatchesQuery =
-        cachedData &&
-        (cached.filter === qp.filter) &&
-        (cached.pageIndex === qp.pageIndex) &&
-        (cached.pageSize === qp.pageSize) &&
-        (cached.sortActive === qp.sortActive) &&
-        (cached.sortDirection === qp.sortDirection);
+        !!cachedData &&
+        (cached.filter ?? '') === (qp.filter ?? '') &&
+        (cached.pageIndex ?? 0) === (qp.pageIndex ?? 0) &&
+        (cached.pageSize ?? 10) === (qp.pageSize ?? 10) &&
+        (cached.sortActive ?? null) === (qp.sortActive ?? null) &&
+        (cached.sortDirection ?? '') === (qp.sortDirection ?? '');
 
       if (cachedData && cachedMatchesQuery) {
-        // reuse cached data
+        // reuse cached data without recreating the table state
         this.setTableData(cachedData);
-        // paginator/sort will be applied in AfterViewInit when view children are ready
       } else {
         // fetch from server
         this.getCarList(qp);
@@ -170,14 +168,17 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setTableData(data: any[]) {
-    this.dataSource = new MatTableDataSource(data);
+    if (!this.dataSource) {
+      this.dataSource = new MatTableDataSource(data);
+    } else {
+      this.dataSource.data = data;
+    }
+
     this.syncPaginatorWithDataSource();
-    // apply current filter if any
+
+    // Apply current filter without forcing the paginator back to the first page
     if (this.filterValue) {
       this.dataSource.filter = this.filterValue.trim().toLowerCase();
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
     }
   }
 
