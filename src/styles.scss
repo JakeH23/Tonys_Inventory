@@ -35,9 +35,12 @@ body {
     font-family: Oswald, sans-serif !important;
 }
 
-.navbar-color {
-    background-color: black;
-    color: white;
+.navbar-color,
+.mat-toolbar,
+.mat-toolbar-row {
+    background-color: black !important;
+    color: white !important;
+    --mat-toolbar-container-background-color: black !important;
 }
 
 .router-link-active {
