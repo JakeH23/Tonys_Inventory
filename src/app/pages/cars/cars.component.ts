@@ -35,6 +35,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
+  pageIndex = 0;
+  pageSize = 10;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -63,6 +65,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       // If query params exist use them, otherwise fallback to cached state
       const qp = this.parseQueryParams(params);
       this.filterValue = qp.filter ?? cached.filter ?? '';
+      this.pageIndex = qp.pageIndex ?? cached.pageIndex ?? 0;
+      this.pageSize = qp.pageSize ?? cached.pageSize ?? 10;
       // set form control without emitting event (we'll control emitting)
       this.filterControl.setValue(this.filterValue, { emitEvent: false });
 
@@ -103,6 +107,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     // When paginator or sort change update query params and cached state
     if (this.paginator) {
       this.paginator.page.pipe(takeUntil(this.destroy$)).subscribe((page: PageEvent) => {
+        this.pageIndex = page.pageIndex;
+        this.pageSize = page.pageSize;
         this.stateService.setState({ pageIndex: page.pageIndex, pageSize: page.pageSize });
         this.updateQueryParams({ pageIndex: page.pageIndex, pageSize: page.pageSize });
       });
@@ -118,13 +124,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     // Ensure paginator + sort applied to existing dataSource if we had cached data and set it earlier
     const cached = this.stateService.snapshot;
     if (this.dataSource) {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      // apply restored paginator & sort
-      if (this.paginator && typeof cached.pageIndex === 'number') {
-        this.paginator.pageIndex = cached.pageIndex;
-        this.paginator.pageSize = cached.pageSize ?? this.paginator.pageSize;
-      }
+      this.syncPaginatorWithDataSource();
       if (this.sort && cached.sortActive) {
         this.sort.active = cached.sortActive;
         this.sort.direction = cached.sortDirection as '' | 'asc' | 'desc';
@@ -171,19 +171,29 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private setTableData(data: any[]) {
     this.dataSource = new MatTableDataSource(data);
-    // if view children already exist, assign them
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-    }
+    this.syncPaginatorWithDataSource();
     // apply current filter if any
     if (this.filterValue) {
       this.dataSource.filter = this.filterValue.trim().toLowerCase();
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
+    }
+  }
+
+  private syncPaginatorWithDataSource() {
+    if (!this.dataSource) {
+      return;
+    }
+
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    if (this.paginator) {
+      const itemCount = this.dataSource.filteredData?.length ?? this.dataSource.data?.length ?? 0;
+      this.paginator.length = itemCount;
+      this.paginator.pageIndex = this.pageIndex;
+      this.paginator.pageSize = this.pageSize;
     }
   }
 
