@@ -26,6 +26,10 @@ export class PartsComponent implements OnInit {
   allData: any[] = [];
   selectedCategory: string | null = null;
   selectedVehicleSide: string | null = null;
+  isLoading = false;
+  hasError = false;
+  errorMessage = '';
+  activeFilterLabel = 'All parts';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filterInput') filterInput!: ElementRef; // Add ViewChild for the input field
@@ -52,14 +56,24 @@ export class PartsComponent implements OnInit {
   }
 
   getPartList() {
+    this.isLoading = true;
+    this.hasError = false;
+    this.errorMessage = '';
+
     this._partService.getPartList().subscribe({
       next: (res) => {
         this.allData = res;
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.isLoading = false;
       },
-      error: console.log,
+      error: (err) => {
+        this.isLoading = false;
+        this.hasError = true;
+        this.errorMessage = 'We could not load your parts right now. Please try again.';
+        console.log(err);
+      },
     });
   }
 
@@ -70,6 +84,8 @@ export class PartsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+
+    this.activeFilterLabel = filterValue.trim() ? `Filtered by “${filterValue.trim()}”` : 'All parts';
   }
 
   filterByCategory() {
@@ -77,8 +93,10 @@ export class PartsComponent implements OnInit {
       this.dataSource.data = this.allData.filter(
         (part) => part.Category === this.selectedCategory
       );
+      this.activeFilterLabel = `Category: ${this.selectedCategory}`;
     } else {
       this.dataSource.data = this.allData;
+      this.activeFilterLabel = 'All parts';
     }
   }
 
@@ -87,8 +105,10 @@ export class PartsComponent implements OnInit {
       this.dataSource.data = this.allData.filter(
         (part) => part.VehicleSide === this.selectedVehicleSide
       );
+      this.activeFilterLabel = `Side: ${this.selectedVehicleSide}`;
     } else {
       this.dataSource.data = this.allData;
+      this.activeFilterLabel = 'All parts';
     }
   }
 
@@ -97,6 +117,7 @@ export class PartsComponent implements OnInit {
     this.selectedVehicleSide = null;
     this.dataSource.filter = '';
     this.dataSource.data = this.allData;
+    this.activeFilterLabel = 'All parts';
     if (this.filterInput) {
       this.filterInput.nativeElement.value = '';
     }

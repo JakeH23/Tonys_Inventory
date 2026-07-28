@@ -1,16 +1,24 @@
 <div class="main-body">
+  <div class="page-header">
+    <div>
+      <h1>Parts</h1>
+      <p class="page-subtitle">Filter parts quickly by text, category, or vehicle side.</p>
+    </div>
+    <button mat-raised-button color="primary" class="primary-action" (click)="openAddPartForm()">Add part</button>
+  </div>
 
-  <!-- Filter Input -->
-  <div class="filter-container" style="display: flex; gap: 16px; align-items: center;">
-    <mat-form-field style="flex: 1;">
-      <mat-label>Filter All</mat-label>
+  <div class="filter-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Search parts</mat-label>
       <input matInput #filterInput (keyup)="applyFilter($event)" placeholder="Ex. E-1000, 9-3, 9600183R, damaged"
         #input>
+      <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
-    <mat-form-field style="flex: 1;">
+    <mat-form-field appearance="outline">
       <mat-label>Category</mat-label>
       <mat-select [(value)]="selectedCategory" (selectionChange)="filterByCategory()">
+        <mat-option [value]="null">All categories</mat-option>
         <mat-option value="Ext Electrical">Ext Electrical</mat-option>
         <mat-option value="Ext Bodywork">Ext Bodywork</mat-option>
         <mat-option value="Ext Mechanical">Ext Mechanical</mat-option>
@@ -24,24 +32,27 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field style="flex: 1;">
-      <mat-label>Vehicle Side</mat-label>
+    <mat-form-field appearance="outline">
+      <mat-label>Vehicle side</mat-label>
       <mat-select [(value)]="selectedVehicleSide" (selectionChange)="filterByVehicleSide()">
-        <mat-option value="">None</mat-option>
+        <mat-option [value]="null">All sides</mat-option>
         <mat-option value="All">All</mat-option>
         <mat-option value="N/S">N/S</mat-option>
         <mat-option value="O/S">O/S</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="accent" style="display: flex; align-items: center; gap: 8px; margin-bottom: 25px;"
-      (click)="clearFilters()">
+    <button mat-stroked-button color="accent" class="clear-button" (click)="clearFilters()">
       <mat-icon>clear_all</mat-icon>
-      Clear All Filters
+      Clear filters
     </button>
   </div>
 
-  <div class="table-container">
+  <div class="status-row" *ngIf="activeFilterLabel">
+    <span class="status-pill">{{ activeFilterLabel }}</span>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading && !hasError">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- Columns (unchanged) -->
@@ -89,10 +100,27 @@
 
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No data matching the filter "{{filterInput?.value}}"</td>
+        <td class="mat-cell" colspan="7">
+          <div class="empty-state">
+            <h3>No parts found</h3>
+            <p>Try a broader search or clear one of the active filters.</p>
+          </div>
+        </td>
       </tr>
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of parts"></mat-paginator>
+  </div>
+
+  <div class="state-card" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading parts…</p>
+  </div>
+
+  <div class="state-card error-state" *ngIf="hasError">
+    <mat-icon>error_outline</mat-icon>
+    <h3>Something went wrong</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-stroked-button color="primary" (click)="getPartList()">Try again</button>
   </div>
 </div>

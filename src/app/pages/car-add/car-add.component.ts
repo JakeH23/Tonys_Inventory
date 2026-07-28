@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
@@ -31,12 +31,12 @@ export class CarAddComponent implements OnInit {
   ) {
     this.carForm = this._fb.group({
       Id: '',
-      ManufacturersCode: '',
-      Make: '',
-      Model: '',
-      EstimatedValue: 0,
-      Boxed: false,
-      Notes: '',
+      ManufacturersCode: ['', [Validators.required, Validators.maxLength(50)]],
+      Make: ['', [Validators.required, Validators.maxLength(80)]],
+      Model: ['', [Validators.required, Validators.maxLength(80)]],
+      EstimatedValue: [0, [Validators.required, Validators.min(0)]],
+      Boxed: [false, Validators.required],
+      Notes: ['', Validators.maxLength(300)],
       Image: ''
     });
   }
@@ -46,28 +46,34 @@ export class CarAddComponent implements OnInit {
   }
 
   onFormSubmit() {
-    if (this.carForm.valid) {
-      if (this.carForm.controls['Id'].value != '') {
-        this._carService.updateCar(this.carForm.controls['Id'].value, this.carForm.value).subscribe({
-          next: () => {
-            this._coreService.openSnackBar('Car added successfully');
-            this._dialogRef.close(this.carForm.controls['Id'].value);
-          },
-          error: (err: any) => {
-            console.error(err);
-          },
-        });
-      } else {
-        this._carService.addCar(this.carForm.value).subscribe({
-          next: (res) => {
-            this._coreService.openSnackBar('Car added successfully');
-            this._dialogRef.close(res.id);
-          },
-          error: (err: any) => {
-            console.error(err);
-          },
-        });
-      }
+    if (this.carForm.invalid) {
+      this.carForm.markAllAsTouched();
+      this._coreService.openSnackBar('Please complete the highlighted fields first.');
+      return;
+    }
+
+    if (this.carForm.controls['Id'].value != '') {
+      this._carService.updateCar(this.carForm.controls['Id'].value, this.carForm.value).subscribe({
+        next: () => {
+          this._coreService.openSnackBar('Car updated successfully');
+          this._dialogRef.close(this.carForm.controls['Id'].value);
+        },
+        error: (err: any) => {
+          this._coreService.openSnackBar('Unable to update the car right now.');
+          console.error(err);
+        },
+      });
+    } else {
+      this._carService.addCar(this.carForm.value).subscribe({
+        next: (res) => {
+          this._coreService.openSnackBar('Car added successfully');
+          this._dialogRef.close(res.id);
+        },
+        error: (err: any) => {
+          this._coreService.openSnackBar('Unable to add the car right now.');
+          console.error(err);
+        },
+      });
     }
   }
 

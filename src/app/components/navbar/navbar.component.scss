@@ -1,44 +1,81 @@
-.nav-image-container {
+.app-shell {
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Prevent overflow */
-    height: 100%; /* Full height of the navbar */
-    margin-right: 16px; /* Add spacing between the image and the partition line */
-}
-
-.partition-line {
-    width: 1px; /* Thin vertical line */
-    height: 60%; /* Adjust height as needed */
-    background-color: #ccc; /* Light gray color for the line */
-    margin-right: 16px; /* Add spacing between the line and the buttons */
-}
-
-.left-buttons {
-    display: flex;
-    align-items: center;
-    margin-right: auto; /* Push the buttons to the left */
+    flex-direction: column;
 }
 
 .mat-toolbar {
-    height: 80px; /* Adjust the height of the navbar */
+    min-height: 80px;
     display: flex;
     align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .nav-image-link {
-    display: flex; /* Ensure the link behaves like a container for the image */
-    align-items: center; /* Center the image vertically within the link */
-    justify-content: center; /* Center the image horizontally within the link */
-    text-decoration: none; /* Remove underline from the link */
-    height: 100%; /* Match the height of the container */
-    width: auto; /* Allow the width to adjust based on the image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .nav-image-header {
-    max-width: 100%; /* Scale down to fit container */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 80%; /* Limit the height of the image */
-    object-fit: contain; /* Ensure the image fits within its box */
-    display: block; /* Ensure the image behaves as a block element */
+    max-width: 100%;
+    height: auto;
+    max-height: 64px;
+    object-fit: contain;
+    display: block;
+}
+
+.nav-actions,
+.nav-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.nav-actions {
+    margin-left: 16px;
+    flex: 1;
+}
+
+.custom-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.page-content {
+    flex: 1;
+}
+
+@media (max-width: 900px) {
+    .mat-toolbar {
+        flex-wrap: wrap;
+        min-height: auto;
+        padding: 12px 16px;
+    }
+
+    .nav-actions,
+    .nav-quick-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-image-header {
+        max-height: 48px;
+    }
+
+    .custom-button span {
+        display: none;
+    }
 }

@@ -37,6 +37,10 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource!: MatTableDataSource<any>;
   pageIndex = 0;
   pageSize = 10;
+  isLoading = false;
+  hasError = false;
+  errorMessage = '';
+  activeFilterLabel = 'All cars';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -147,9 +151,14 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getCarList(qp?: QueryParams) {
+    this.isLoading = true;
+    this.hasError = false;
+    this.errorMessage = '';
+
     this._carService.getCarList().pipe(takeUntil(this.destroy$)).subscribe({
       next: (res) => {
         this.setTableData(res);
+        this.isLoading = false;
 
         // save data and state to cache
         this.stateService.setData(res);
@@ -163,7 +172,12 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
           sortDirection: (qp?.sortDirection as any) ?? current.sortDirection,
         });
       },
-      error: console.log,
+      error: (err) => {
+        this.isLoading = false;
+        this.hasError = true;
+        this.errorMessage = 'We could not load your cars right now. Please try again.';
+        console.log(err);
+      },
     });
   }
 
@@ -200,13 +214,13 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyFilterToTable(filterValue: string) {
     if (this.dataSource) {
-      // Ensure we use the default predicate for free-text filters
       this.dataSource.filterPredicate = this.defaultFilterPredicate;
       this.dataSource.filter = filterValue.trim().toLowerCase();
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
     }
+    this.activeFilterLabel = filterValue.trim() ? `Filtered by “${filterValue.trim()}”` : 'All cars';
   }
 
   // Default filter predicate: stringify row values and perform substring match
@@ -230,15 +244,14 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Filter rows by `Boxed` boolean
   filterBoxed(boxed: boolean) {
     if (!this.dataSource) return;
-    // Use a special predicate for boxed filtering
     this.dataSource.filterPredicate = (data: any, filter: string) => {
       if (filter === '__BOXED_TRUE__') return !!data.Boxed;
       if (filter === '__BOXED_FALSE__') return !data.Boxed;
-      // fallback to default
       return this.defaultFilterPredicate(data, filter);
     };
     this.dataSource.filter = boxed ? '__BOXED_TRUE__' : '__BOXED_FALSE__';
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
+    this.activeFilterLabel = boxed ? 'Boxed cars' : 'Unboxed cars';
   }
 
   // Filter to recently added cars (heuristic: highest 10 Ids)
@@ -255,6 +268,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     this.dataSource.filter = '__RECENT__';
     if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
+    this.activeFilterLabel = 'Recently added cars';
   }
 
   // helper to build and push query params

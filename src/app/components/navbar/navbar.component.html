@@ -1,49 +1,37 @@
-<div fxLayout="column" fxFlexFill>
-    <mat-toolbar class="navbar-color mat-elevation-z8 p-0" fxLayout="row" fxLayoutAlign="space-between center"
-        style="width: 100%; z-index: 2">
-
-        <!-- Left Image -->
-        <div fxFlex="none" fxLayout="row" fxLayoutAlign="start center" class="nav-image-container">
+<div class="app-shell">
+    <mat-toolbar class="navbar-color mat-elevation-z8 p-0">
+        <div class="nav-brand">
             <a routerLink="/" class="nav-image-link">
-                <img class="nav-image-header" src="../../../assets/toolbar-header.jpg" alt="Toolbar Header" />
+                <img class="nav-image-header" src="../../../assets/toolbar-header.jpg" alt="Tony's Inventory home" />
             </a>
         </div>
 
-        <!-- Partition Line -->
-        <div class="partition-line"></div>
-
-        <!-- Routed Buttons -->
-        <div fxFlex fxLayout="row" fxLayoutAlign="start center" class="left-buttons">
+        <div class="nav-actions">
             <button mat-button routerLink="/" routerLinkActive="selected no-border txt-bold" class="custom-button">
-                <mat-icon class="custom-nav-button">home</mat-icon>Home
+                <mat-icon>home</mat-icon>
+                <span>Home</span>
             </button>
-            <button mat-button routerLink="/cars" routerLinkActive="selected no-border txt-bold"
-                class="custom-button mr-2">
-                <mat-icon class="custom-button">directions_car</mat-icon>Slot Cars
+            <button mat-button routerLink="/cars" routerLinkActive="selected no-border txt-bold" class="custom-button">
+                <mat-icon>directions_car</mat-icon>
+                <span>Cars</span>
             </button>
-            <button mat-button routerLink="/gallery" routerLinkActive="selected no-border txt-bold"
-                class="custom-button mr-2">
-                <mat-icon class="custom-button">image</mat-icon>Car Gallery
+            <button mat-button routerLink="/gallery" routerLinkActive="selected no-border txt-bold" class="custom-button">
+                <mat-icon>image</mat-icon>
+                <span>Gallery</span>
             </button>
-            <button mat-button routerLink="/parts" routerLinkActive="selected no-border txt-bold"
-                class="custom-button mr-2">
-                <mat-icon class="custom-button">build</mat-icon>Parts
+            <button mat-button routerLink="/parts" routerLinkActive="selected no-border txt-bold" class="custom-button">
+                <mat-icon>build</mat-icon>
+                <span>Parts</span>
             </button>
         </div>
 
-        <!-- Right Button -->
-        <div fxFlex="none" fxLayout="row" fxLayoutAlign="end center">
-            <button mat-raised-button class="custom-button mr-2" (click)="openAddCarForm()">
-                ADD CAR
-            </button>
-            <button mat-raised-button class="custom-button mr-2" (click)="openAddPartForm()">
-                ADD PARTS
-            </button>
+        <div class="nav-quick-actions">
+            <button mat-raised-button class="custom-button" (click)="openAddCarForm()">Add car</button>
+            <button mat-raised-button class="custom-button" (click)="openAddPartForm()">Add part</button>
         </div>
     </mat-toolbar>
 
-    <!-- PAGES -->
-    <div style="display: inline;">
+    <div class="page-content">
         <router-outlet></router-outlet>
     </div>
 </div>

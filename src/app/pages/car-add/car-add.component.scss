@@ -13,6 +13,8 @@
 
 .action {
   padding: 0px 25px 20px;
+  display: flex;
+  gap: 12px;
 
   button {
     flex: 1;
@@ -22,14 +24,18 @@
 .example-radio-group {
   flex-direction: column;
   align-items: flex-start;
+  margin: 8px 0 12px;
 }
 
 .example-radio-button {
   margin: 5px;
 }
 
-.file-upload{
-  display: contents;
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .file-input {
@@ -38,10 +44,21 @@
 
 .thumbnail {
   height: 100px;
+  border-radius: 8px;
 }
 
 .lime-btn {
-  background-color: lime !important; /* Lime background */
-  color: black !important; /* Black font color */
-  text-transform: none; /* Prevent uppercase text */
+  background-color: lime !important;
+  color: black !important;
+  text-transform: none;
+}
+
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .action {
+    flex-direction: column;
+  }
 }

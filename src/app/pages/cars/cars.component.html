@@ -1,19 +1,31 @@
 <div class="main-body">
-
-  <!-- Filter Buttons -->
-  <div class="filter-buttons">
-    <button mat-raised-button color="primary" (click)="filterBoxed(true)">Boxed</button>
-    <button mat-raised-button color="accent" (click)="filterBoxed(false)">Unboxed</button>
-    <button mat-raised-button color="warn" (click)="filterRecentlyAdded()">Recently Added</button>
+  <div class="page-header">
+    <div>
+      <h1>Slot cars</h1>
+      <p class="page-subtitle">Browse, filter, and manage your collection with quick actions.</p>
+    </div>
+    <button mat-raised-button color="primary" class="primary-action" (click)="openAddCarForm()">Add car</button>
   </div>
 
-  <!-- Filter Input -->
-  <mat-form-field>
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Scalextric, Porsche, C2671, Matt" #input>
-  </mat-form-field>
+  <div class="filter-toolbar">
+    <div class="chip-group">
+      <button mat-stroked-button color="primary" (click)="filterBoxed(true)">Boxed</button>
+      <button mat-stroked-button color="accent" (click)="filterBoxed(false)">Unboxed</button>
+      <button mat-stroked-button color="warn" (click)="filterRecentlyAdded()">Recently added</button>
+      <button mat-button (click)="dataSource?.filter = ''; activeFilterLabel = 'All cars'">Clear filters</button>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Search inventory</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Scalextric, Porsche, C2671, Matt" #input>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
 
-  <div class="table-container">
+  <div class="status-row" *ngIf="activeFilterLabel">
+    <span class="status-pill">{{ activeFilterLabel }}</span>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading && !hasError">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- Columns (unchanged) -->
@@ -59,7 +71,12 @@
 
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        <td class="mat-cell" colspan="6">
+          <div class="empty-state">
+            <h3>No cars found</h3>
+            <p>Try broadening your search or clearing the current filter.</p>
+          </div>
+        </td>
       </tr>
     </table>
 
@@ -70,5 +87,17 @@
       [pageSizeOptions]="[5, 10, 25, 100]"
       aria-label="Select page of cars"
     ></mat-paginator>
+  </div>
+
+  <div class="state-card" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading your inventory…</p>
+  </div>
+
+  <div class="state-card error-state" *ngIf="hasError">
+    <mat-icon>error_outline</mat-icon>
+    <h3>Something went wrong</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-stroked-button color="primary" (click)="getCarList()">Try again</button>
   </div>
 </div>

@@ -8,24 +8,31 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Manufacturers Code</mat-label>
                     <input matInput type="text" placeholder="Ex. C2878" formControlName="ManufacturersCode">
+                    <mat-error *ngIf="carForm.get('ManufacturersCode')?.hasError('required')">Manufacturers code is required.</mat-error>
+                    <mat-error *ngIf="carForm.get('ManufacturersCode')?.hasError('maxlength')">Keep this under 50 characters.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Model</mat-label>
                     <input matInput type="text" placeholder="Ex. Porsche" formControlName="Model">
+                    <mat-error *ngIf="carForm.get('Model')?.hasError('required')">Model is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Notes</mat-label>
                     <textarea rows="3" matInput placeholder="Ex. 4" formControlName="Notes"></textarea>
+                    <mat-error *ngIf="carForm.get('Notes')?.hasError('maxlength')">Keep notes under 300 characters.</mat-error>
                 </mat-form-field>
             </div>
             <div class="col">
                 <mat-form-field appearance="outline">
                     <mat-label>Make</mat-label>
                     <input matInput type="text" placeholder="Ex. Scalextric" formControlName="Make">
+                    <mat-error *ngIf="carForm.get('Make')?.hasError('required')">Make is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Estimated Value</mat-label>
                     <input matInput type="number" placeholder="Ex. 50" formControlName="EstimatedValue">
+                    <mat-error *ngIf="carForm.get('EstimatedValue')?.hasError('required')">Estimated value is required.</mat-error>
+                    <mat-error *ngIf="carForm.get('EstimatedValue')?.hasError('min')">Value cannot be negative.</mat-error>
                 </mat-form-field>
                 <mat-label id="example-radio-group-label">Boxed?</mat-label>
                 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
