@@ -189,11 +189,61 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyFilterToTable(filterValue: string) {
     if (this.dataSource) {
+      // Ensure we use the default predicate for free-text filters
+      this.dataSource.filterPredicate = this.defaultFilterPredicate;
       this.dataSource.filter = filterValue.trim().toLowerCase();
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
     }
+  }
+
+  // Default filter predicate: stringify row values and perform substring match
+  private defaultFilterPredicate = (data: any, filter: string) => {
+    const normalizedFilter = (filter || '').trim().toLowerCase();
+    if (!normalizedFilter) return true;
+    const dataStr = Object.keys(data)
+      .map((k) => (data[k] == null ? '' : String(data[k])))
+      .join(' ')
+      .toLowerCase();
+    return dataStr.indexOf(normalizedFilter) !== -1;
+  };
+
+  // Called from template input (keyup)
+  applyFilter(event: Event) {
+    const val = (event.target as HTMLInputElement).value ?? '';
+    // Reset any special predicates and use the reactive control pipeline
+    this.filterControl.setValue(val);
+  }
+
+  // Filter rows by `Boxed` boolean
+  filterBoxed(boxed: boolean) {
+    if (!this.dataSource) return;
+    // Use a special predicate for boxed filtering
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      if (filter === '__BOXED_TRUE__') return !!data.Boxed;
+      if (filter === '__BOXED_FALSE__') return !data.Boxed;
+      // fallback to default
+      return this.defaultFilterPredicate(data, filter);
+    };
+    this.dataSource.filter = boxed ? '__BOXED_TRUE__' : '__BOXED_FALSE__';
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
+  }
+
+  // Filter to recently added cars (heuristic: highest 10 Ids)
+  filterRecentlyAdded() {
+    if (!this.dataSource || !this.dataSource.data || this.dataSource.data.length === 0) return;
+    const ids = this.dataSource.data
+      .map((d: any) => Number(d.Id) || 0)
+      .sort((a: number, b: number) => b - a)
+      .slice(0, 10);
+    const recentSet = new Set(ids);
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      if (filter === '__RECENT__') return recentSet.has(Number(data.Id));
+      return this.defaultFilterPredicate(data, filter);
+    };
+    this.dataSource.filter = '__RECENT__';
+    if (this.dataSource.paginator) this.dataSource.paginator.firstPage();
   }
 
   // helper to build and push query params
