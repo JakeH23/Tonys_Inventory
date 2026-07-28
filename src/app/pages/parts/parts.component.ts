@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { PartService } from 'src/app/services/part.service';
 import { PartAddComponent } from '../part-add/part-add.component';
+import { Part } from 'src/app/models/part.model';
 
 @Component({
   selector: 'app-parts',
@@ -22,8 +23,8 @@ export class PartsComponent implements OnInit {
     'description',
     'action',
   ];
-  dataSource!: MatTableDataSource<any>;
-  allData: any[] = [];
+  dataSource!: MatTableDataSource<Part>;
+  allData: Part[] = [];
   selectedCategory: string | null = null;
   selectedVehicleSide: string | null = null;
   isLoading = false;
@@ -123,11 +124,11 @@ export class PartsComponent implements OnInit {
     }
   }
 
-  navigateToId(id: number) {
+  navigateToId(id?: number) {
     this.router.navigate([`/parts/${id}`]);
   }
 
-  openEditForm(data: any) {
+  openEditForm(data: Part) {
     const dialogRef = this._dialog.open(PartAddComponent, {
       data,
       width: '100%',

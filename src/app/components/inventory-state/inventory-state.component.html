@@ -1,0 +1,20 @@
+<div class="inventory-state" *ngIf="loading">
+  <mat-spinner diameter="40"></mat-spinner>
+  <h3>{{ title }}</h3>
+  <p>{{ message || loadingMessage }}</p>
+</div>
+
+<div class="inventory-state error-state" *ngIf="error && !loading">
+  <mat-icon>{{ icon }}</mat-icon>
+  <h3>{{ title }}</h3>
+  <p>{{ message }}</p>
+  <button *ngIf="showRetryButton" mat-stroked-button color="primary" type="button" (click)="retry.emit()">
+    {{ retryLabel }}
+  </button>
+</div>
+
+<div class="inventory-state empty-state" *ngIf="empty && !loading && !error">
+  <mat-icon>{{ icon }}</mat-icon>
+  <h3>{{ title }}</h3>
+  <p>{{ message }}</p>
+</div>

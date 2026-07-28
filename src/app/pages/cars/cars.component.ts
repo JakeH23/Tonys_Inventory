@@ -11,6 +11,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CarListStateService } from 'src/app/services/car-list-state.service';
+import { Car } from 'src/app/models/car.model';
 
 interface QueryParams {
   filter?: string | null;
@@ -34,7 +35,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     'boxed',
     'action',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource!: MatTableDataSource<Car>;
   pageIndex = 0;
   pageSize = 10;
   isLoading = false;
@@ -181,7 +182,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private setTableData(data: any[]) {
+  private setTableData(data: Car[]) {
     if (!this.dataSource) {
       this.dataSource = new MatTableDataSource(data);
     } else {
@@ -224,11 +225,20 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Default filter predicate: stringify row values and perform substring match
-  private defaultFilterPredicate = (data: any, filter: string) => {
+  private defaultFilterPredicate = (data: Car, filter: string) => {
     const normalizedFilter = (filter || '').trim().toLowerCase();
     if (!normalizedFilter) return true;
-    const dataStr = Object.keys(data)
-      .map((k) => (data[k] == null ? '' : String(data[k])))
+    const searchableValues = [
+      data.ManufacturersCode,
+      data.Make,
+      data.Model,
+      data.EstimatedValue,
+      data.Boxed,
+      data.Notes,
+      data.Image,
+    ];
+    const dataStr = searchableValues
+      .map((value) => (value == null ? '' : String(value)))
       .join(' ')
       .toLowerCase();
     return dataStr.indexOf(normalizedFilter) !== -1;

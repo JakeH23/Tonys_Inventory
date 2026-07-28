@@ -47,7 +47,7 @@ export class CarEditComponent implements OnInit {
     this._carService.getCarById(this.id).subscribe({
       next: (res) => {
         this.carForm.patchValue(res);
-        this.image = res.Image;
+        this.image = res.Image ?? '';
       },
       error: console.log,
     });

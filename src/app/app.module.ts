@@ -18,6 +18,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { PartsComponent } from './pages/parts/parts.component';
 import { PartAddComponent } from './pages/part-add/part-add.component';
 import { PartEditComponent } from './pages/part-edit/part-edit.component';
+import { InventoryStateComponent } from './components/inventory-state/inventory-state.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { PartEditComponent } from './pages/part-edit/part-edit.component';
     PartsComponent,
     PartAddComponent,
     PartEditComponent,
-    GalleryComponent
+    GalleryComponent,
+    InventoryStateComponent
   ],
   imports: [
     BrowserModule,

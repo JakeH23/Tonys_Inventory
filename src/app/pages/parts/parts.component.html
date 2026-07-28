@@ -112,15 +112,20 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of parts"></mat-paginator>
   </div>
 
-  <div class="state-card" *ngIf="isLoading">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading parts…</p>
-  </div>
+  <app-inventory-state
+    *ngIf="isLoading"
+    [loading]="true"
+    title="Loading parts"
+    loadingMessage="Loading parts…"
+  ></app-inventory-state>
 
-  <div class="state-card error-state" *ngIf="hasError">
-    <mat-icon>error_outline</mat-icon>
-    <h3>Something went wrong</h3>
-    <p>{{ errorMessage }}</p>
-    <button mat-stroked-button color="primary" (click)="getPartList()">Try again</button>
-  </div>
+  <app-inventory-state
+    *ngIf="hasError && !isLoading"
+    [error]="true"
+    title="Something went wrong"
+    [message]="errorMessage"
+    icon="error_outline"
+    [showRetryButton]="true"
+    (retry)="getPartList()"
+  ></app-inventory-state>
 </div>

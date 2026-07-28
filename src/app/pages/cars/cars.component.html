@@ -89,15 +89,20 @@
     ></mat-paginator>
   </div>
 
-  <div class="state-card" *ngIf="isLoading">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading your inventory…</p>
-  </div>
+  <app-inventory-state
+    *ngIf="isLoading"
+    [loading]="true"
+    title="Loading inventory"
+    loadingMessage="Loading your inventory…"
+  ></app-inventory-state>
 
-  <div class="state-card error-state" *ngIf="hasError">
-    <mat-icon>error_outline</mat-icon>
-    <h3>Something went wrong</h3>
-    <p>{{ errorMessage }}</p>
-    <button mat-stroked-button color="primary" (click)="getCarList()">Try again</button>
-  </div>
+  <app-inventory-state
+    *ngIf="hasError && !isLoading"
+    [error]="true"
+    title="Something went wrong"
+    [message]="errorMessage"
+    icon="error_outline"
+    [showRetryButton]="true"
+    (retry)="getCarList()"
+  ></app-inventory-state>
 </div>
