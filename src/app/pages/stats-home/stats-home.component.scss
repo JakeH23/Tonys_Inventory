@@ -1,3 +1,25 @@
+.dashboard-shell {
+  padding: 24px 20px 40px;
+}
+
+.dashboard-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard-actions h1 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+}
+
+.dashboard-actions p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
 .col {
     background: black !important;
     color: lime !important;
@@ -72,6 +94,13 @@ body {
     .col {
       width: 100%;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-actions {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

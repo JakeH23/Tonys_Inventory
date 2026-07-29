@@ -21,4 +21,37 @@ router.get('/statistics/count', async (req, res, next) => {
   }
 });
 
+router.get('/statistics/report', async (req, res, next) => {
+  try {
+    const report = await Statistic.getDashboardReport();
+    res.json(report);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/statistics/export', async (req, res, next) => {
+  try {
+    const cars = await Statistic.getExportData();
+    const csv = [
+      'Id,ManufacturersCode,Make,Model,EstimatedValue,Boxed,Notes',
+      ...cars.map((car) => [
+        car.Id,
+        `"${(car.ManufacturersCode || '').replace(/"/g, '""')}"`,
+        `"${(car.Make || '').replace(/"/g, '""')}"`,
+        `"${(car.Model || '').replace(/"/g, '""')}"`,
+        car.EstimatedValue || 0,
+        car.Boxed ? 'true' : 'false',
+        `"${(car.Notes || '').replace(/"/g, '""')}"`,
+      ].join(',')),
+    ].join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="inventory.csv"');
+    res.send(csv);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

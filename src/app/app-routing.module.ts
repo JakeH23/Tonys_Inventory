@@ -1,21 +1,15 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CarsComponent } from './pages/cars/cars.component';
-import { StatsHomeComponent } from './pages/stats-home/stats-home.component';
-import { CarEditComponent } from './pages/car-edit/car-edit.component';
-import { PartsComponent } from './pages/parts/parts.component';
-import { GalleryComponent } from './pages/gallery/gallery.component';
-import { PartEditComponent } from './pages/part-edit/part-edit.component';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: '', loadChildren: () => import('./pages/stats-home/stats-home.module').then(m => m.StatsHomeModule) },
+  { path: 'cars', loadChildren: () => import('./pages/cars/cars.module').then(m => m.CarsModule) },
+  { path: 'parts', loadChildren: () => import('./pages/parts/parts.module').then(m => m.PartsModule) },
+  { path: 'gallery', loadChildren: () => import('./pages/gallery/gallery.module').then(m => m.GalleryModule) }
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot([
-    { path: '', component: StatsHomeComponent },
-    { path: 'cars', component: CarsComponent },
-    { path: 'cars/:id', component: CarEditComponent },
-    { path: 'parts', component: PartsComponent },
-    { path: 'parts/:id', component: PartEditComponent },
-    { path: 'gallery', component: GalleryComponent }
-  ])],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,47 +1,61 @@
-<div class="flex-grid-quarters">
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <mat-icon class="custom-nav-button">directions_car</mat-icon>
-        <h3 class="card-title"><b>Total Cars</b></h3>
-        <p class="card-text">{{totalCarsCount}}</p>
+<div class="dashboard-shell">
+  <div class="dashboard-actions">
+    <div>
+      <h1>Inventory dashboard</h1>
+      <p>Monitor your collection, spot high-value items, and export your data in one place.</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="exportInventory()">Export inventory</button>
+  </div>
+
+  <div class="flex-grid-quarters">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <mat-icon class="custom-nav-button">directions_car</mat-icon>
+          <h3 class="card-title"><b>Total Cars</b></h3>
+          <p class="card-text">{{totalCarsCount}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <mat-icon class="custom-nav-button">attach_money</mat-icon>
+          <h3 class="card-title"><b>Estimated Value</b></h3>
+          <p class="card-text">£{{totalCarsValue}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <mat-icon class="custom-nav-button">backpack</mat-icon>
+          <h3 class="card-title"><b>Boxed Cars</b></h3>
+          <p class="card-text">{{boxedTotal}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <mat-icon class="custom-nav-button">bar_chart</mat-icon>
+          <h3 class="card-title"><b>Average Value</b></h3>
+          <p class="card-text">£{{averageValue}}</p>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <mat-icon class="custom-nav-button">attach_money</mat-icon>
-        <h3 class="card-title"><b>Estimated Value</b></h3>
-        <p class="card-text">£{{totalCarsValue}}</p>
-      </div>
+
+  <div class="report-summary" *ngIf="reportError">
+    <p>{{ reportError }}</p>
+  </div>
+
+  <div class="flex-grid-half">
+    <div class="col">
+      <app-carousel [cars]="cars"></app-carousel>
     </div>
-  </div>
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <mat-icon class="custom-nav-button">backpack</mat-icon>
-        <h3 class="card-title"><b>Boxed Cars</b></h3>
-        <p class="card-text">{{boxedTotal}}</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card">
-      <div class="card-body">
-        <mat-icon class="custom-nav-button">no_backpack</mat-icon>
-        <h3 class="card-title"><b>Unboxed Cars</b></h3>
-        <p class="card-text">{{unboxedTotal}}</p>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="flex-grid-half">
-  <div class="col">
-    <app-carousel [cars]="cars"></app-carousel>
-  </div>
-  <div class="col hide-on-mobile">
-    <h3><b>Highest Valued Cars</b></h3>
+    <div class="col hide-on-mobile">
+      <h3><b>Highest Valued Cars</b></h3>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="make">

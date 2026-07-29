@@ -89,6 +89,10 @@ export class PartEditComponent implements OnInit {
       reader.onerror = (error) => reject(error)
     })
 
+  getPartImages(): string[] {
+    return this.partForm.get('Images')?.value || [];
+  }
+
   openImagePopOut(image: string): void {
     this.selectedImage = image; // Set the selected image for the pop-out view
   }

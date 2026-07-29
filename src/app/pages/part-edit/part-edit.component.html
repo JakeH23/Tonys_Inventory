@@ -77,12 +77,12 @@
                 <div class="row pt-2 ml-0">
                     <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
                     <div class="file-upload">
-                        <div *ngIf="!partForm.get('Images')?.value || partForm.get('Images')?.value.length === 0">
+                        <div *ngIf="!getPartImages().length">
                             No files uploaded yet.
                         </div>
-                        <div *ngIf="partForm.get('Images')?.value && partForm.get('Images')?.value.length > 0"
+                        <div *ngIf="getPartImages().length > 0"
                             class="image-gallery">
-                            <div *ngFor="let image of partForm.get('Images')?.value" class="image-item">
+                            <div *ngFor="let image of getPartImages()" class="image-item">
                                 <img [src]="image" class="thumbnail" alt="Part Image" tabindex="0" 
                                      (click)="openImagePopOut(image)" (keydown.enter)="openImagePopOut(image)"/>
                             </div>

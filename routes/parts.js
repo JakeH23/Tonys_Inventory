@@ -3,11 +3,41 @@ const router = express.Router();
 const Part = require('../models/part');
 const config = require('../config/database');
 
-// Route to get all parts
+// Route to get all parts with optional filtering, sorting, and pagination
 router.get('/', async (req, res, next) => {
   try {
-    const parts = await Part.getAllParts();
-    res.json(parts);
+    const page = Math.max(1, parseInt(req.query.page || '1', 10));
+    const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize || '20', 10)));
+    const sortBy = req.query.sortBy || 'Id';
+    const sortDirection = req.query.sortDirection === 'desc' ? -1 : 1;
+    const search = (req.query.search || '').toString().trim().toLowerCase();
+    const category = (req.query.category || '').toString().trim();
+    const vehicleSide = (req.query.vehicleSide || '').toString().trim();
+
+    const query = {};
+    if (search) {
+      query.$or = [
+        { CatalogNumber: { $regex: search, $options: 'i' } },
+        { Category: { $regex: search, $options: 'i' } },
+        { ModelNumber: { $regex: search, $options: 'i' } },
+        { PartNumber: { $regex: search, $options: 'i' } },
+        { Description: { $regex: search, $options: 'i' } },
+      ];
+    }
+    if (category) {
+      query.Category = category;
+    }
+    if (vehicleSide) {
+      query.VehicleSide = vehicleSide;
+    }
+
+    const total = await Part.countDocuments(query);
+    const parts = await Part.find(query)
+      .sort({ [sortBy]: sortDirection })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize);
+
+    res.json({ items: parts, total, page, pageSize });
   } catch (err) {
     next(err);
   }

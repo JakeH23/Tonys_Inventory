@@ -7,20 +7,25 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PartImagesService {
-  baseUrl = environment.baseUrl || "";
+  baseUrl = environment.baseUrl || '/';
   headers = { 'Content-Type': 'application/json' };
 
   constructor(private _http: HttpClient) { }
 
-  getRandomPartImages(): Observable<any> {
-    return this._http.get(`${this.baseUrl}api/part-images`, { headers: this.headers });
+  private buildUrl(path: string): string {
+    const normalizedBase = this.baseUrl.replace(/\/?$/, '/');
+    return `${normalizedBase}${path.replace(/^\/+/, '')}`;
   }
 
-  uploadPartImage(file: string): Observable<any> {
-    return this._http.post(`${this.baseUrl}api/part-images`, { data: file }, { headers: this.headers });
+  getPartImages(): Observable<any> {
+    return this._http.get(this.buildUrl('api/part-images'), { headers: this.headers });
+  }
+
+  uploadPartImage(data: any): Observable<any> {
+    return this._http.post(this.buildUrl('api/part-images'), data, { headers: this.headers });
   }
 
   updatePartImage(file: string, catalogNumber: string, imageCount: number): Observable<any> {
-    return this._http.put(`${this.baseUrl}api/part-images/${catalogNumber}/${imageCount}`, { data: file }, { headers: this.headers });
+    return this._http.put(this.buildUrl(`api/part-images/${catalogNumber}/${imageCount}`), { data: file }, { headers: this.headers });
   }
 }

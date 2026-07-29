@@ -27,3 +27,24 @@ module.exports.getAllStatistics = async (callback) => {
 module.exports.getAllCarsCount = () => {
   return Car.countDocuments({});
 };
+
+module.exports.getDashboardReport = async () => {
+  const cars = await Car.getAllCars();
+  const totalValue = cars.reduce((sum, car) => sum + (car.EstimatedValue || 0), 0);
+  const boxed = cars.filter((car) => car.Boxed).length;
+  const unboxed = cars.length - boxed;
+  const highestValue = [...cars].sort((a, b) => (b.EstimatedValue || 0) - (a.EstimatedValue || 0)).slice(0, 5);
+
+  return {
+    totalCars: cars.length,
+    totalValue,
+    boxed,
+    unboxed,
+    highestValue,
+    averageValue: cars.length ? Math.round(totalValue / cars.length) : 0,
+  };
+};
+
+module.exports.getExportData = async () => {
+  return Car.getAllCars();
+};

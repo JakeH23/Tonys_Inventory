@@ -61,10 +61,15 @@ export class PartsComponent implements OnInit {
     this.hasError = false;
     this.errorMessage = '';
 
-    this._partService.getPartList().subscribe({
+    this._partService.getPartList({
+      page: 1,
+      pageSize: 20,
+      search: this.filterInput?.nativeElement?.value || '',
+      filter: this.selectedCategory || this.selectedVehicleSide || undefined,
+    }).subscribe({
       next: (res) => {
-        this.allData = res;
-        this.dataSource = new MatTableDataSource(res);
+        this.allData = res.items;
+        this.dataSource = new MatTableDataSource(res.items);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.isLoading = false;

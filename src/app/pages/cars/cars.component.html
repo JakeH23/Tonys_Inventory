@@ -12,7 +12,7 @@
       <button mat-stroked-button color="primary" (click)="filterBoxed(true)">Boxed</button>
       <button mat-stroked-button color="accent" (click)="filterBoxed(false)">Unboxed</button>
       <button mat-stroked-button color="warn" (click)="filterRecentlyAdded()">Recently added</button>
-      <button mat-button (click)="dataSource?.filter = ''; activeFilterLabel = 'All cars'">Clear filters</button>
+      <button mat-button (click)="clearFilters()">Clear filters</button>
     </div>
     <mat-form-field appearance="outline">
       <mat-label>Search inventory</mat-label>
@@ -26,7 +26,7 @@
   </div>
 
   <div class="table-container" *ngIf="!isLoading && !hasError">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="displayedCars" matSort>
 
       <!-- Columns (unchanged) -->
       <ng-container matColumnDef="make">
@@ -80,13 +80,20 @@
       </tr>
     </table>
 
-    <mat-paginator
-      [length]="dataSource?.filteredData?.length || dataSource?.data?.length || 0"
-      [pageIndex]="pageIndex"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page of cars"
-    ></mat-paginator>
+    <div class="paginator-shell">
+      <div class="paginator-summary">
+        Showing {{ pageIndex * pageSize + 1 }}–{{ ((pageIndex + 1) * pageSize) < getTableLength() ? (pageIndex + 1) * pageSize : getTableLength() }} of {{ getTableLength() }} cars
+      </div>
+      <mat-paginator
+        class="cars-paginator"
+        [length]="getTableLength()"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 15, 25, 100]"
+        (page)="onPageChange($event)"
+        aria-label="Select page of cars"
+      ></mat-paginator>
+    </div>
   </div>
 
   <app-inventory-state
