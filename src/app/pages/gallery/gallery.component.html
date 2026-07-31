@@ -1,13 +1,47 @@
+<div class="gallery-header">
+  <div class="filter-toolbar">
+    <mat-form-field appearance="outline">
+      <mat-label>Search gallery</mat-label>
+      <input matInput [formControl]="filterControl" placeholder="Ex. Porsche, C2671, 120" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <button mat-stroked-button class="clear-button" type="button" (click)="clearSearch()">Clear</button>
+    <div class="results-pill">
+      {{ resultsCount }} result{{ resultsCount === 1 ? '' : 's' }}
+    </div>
+  </div>
+</div>
+
 <cdk-virtual-scroll-viewport itemSize="300" class="gallery-grid">
   <div class="gallery-row" *cdkVirtualFor="let row of groupedCarsArray">
-    <div class="gallery-item" *ngFor="let id of row">
-      <a [routerLink]="['/cars', id]">
-        <img 
-          loading="lazy" 
-          src="https://res.cloudinary.com/dlkgqdwtm/image/upload/{{id}}.png" 
-          alt="Car {{ id }}" 
-        />
-      </a>
+    <div class="gallery-item" *ngFor="let car of row" (click)="toggleFlip(car.Id)">
+      <div class="flip-card" [class.flipped]="isFlipped(car.Id)">
+        <div class="flip-card-face flip-card-front">
+          <div class="flip-hint">Tap to flip</div>
+          <img
+            loading="lazy"
+            [src]="car.Image"
+            [alt]="car.Make + ' ' + car.Model"
+          />
+        </div>
+
+        <div class="flip-card-face flip-card-back">
+          <h3>{{ car.Make }}</h3>
+          <p>{{ car.Model }}</p>
+          <a
+            mat-raised-button
+            color="primary"
+            [routerLink]="['/cars', car.Id]"
+            (click)="$event.stopPropagation()">
+            View details
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="gallery-empty" *ngIf="!groupedCarsArray.length">
+    <h3>No cars found</h3>
+    <p>Try a different search term.</p>
   </div>
 </cdk-virtual-scroll-viewport>
