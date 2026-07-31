@@ -1,7 +1,7 @@
 <div class="app-shell">
     <mat-toolbar class="navbar-color mat-elevation-z8 p-0">
         <div class="nav-brand">
-            <a routerLink="/" class="nav-image-link">
+            <a routerLink="/" class="nav-image-link nav-image-link-desktop" aria-label="Tony's Inventory home">
                 <img class="nav-image-header" src="../../../assets/toolbar-header.jpg" alt="Tony's Inventory home" />
             </a>
         </div>
@@ -33,6 +33,43 @@
             <button mat-raised-button class="custom-button" (click)="openAddCarForm()">Add car</button>
             <button mat-raised-button class="custom-button" (click)="openAddPartForm()">Add part</button>
         </div>
+
+        <div class="nav-mobile-menu">
+            <button mat-icon-button [matMenuTriggerFor]="mobileNavMenu" aria-label="Open navigation menu">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
+
+        <mat-menu #mobileNavMenu="matMenu" class="mobile-nav-menu">
+            <button mat-menu-item routerLink="/">
+                <mat-icon>home</mat-icon>
+                <span>Home</span>
+            </button>
+            <button mat-menu-item routerLink="/cars">
+                <mat-icon>directions_car</mat-icon>
+                <span>Cars</span>
+            </button>
+            <button mat-menu-item routerLink="/gallery">
+                <mat-icon>image</mat-icon>
+                <span>Gallery</span>
+            </button>
+            <button mat-menu-item routerLink="/parts">
+                <mat-icon>build</mat-icon>
+                <span>Parts</span>
+            </button>
+            <button mat-menu-item routerLink="/bulk-update">
+                <mat-icon>upload_file</mat-icon>
+                <span>Bulk Update</span>
+            </button>
+            <button mat-menu-item (click)="openAddCarForm()">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add car</span>
+            </button>
+            <button mat-menu-item (click)="openAddPartForm()">
+                <mat-icon>add_box</mat-icon>
+                <span>Add part</span>
+            </button>
+        </mat-menu>
     </mat-toolbar>
 
     <div class="page-content">

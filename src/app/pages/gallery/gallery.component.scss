@@ -32,3 +32,31 @@ cdk-virtual-scroll-viewport {
   height: auto;
   object-fit: cover;
 }
+
+@media (max-width: 1024px) {
+  .gallery-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  cdk-virtual-scroll-viewport {
+    height: 70vh;
+  }
+
+  .gallery-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  cdk-virtual-scroll-viewport {
+    height: 65vh;
+  }
+
+  .gallery-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

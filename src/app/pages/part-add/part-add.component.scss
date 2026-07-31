@@ -13,6 +13,8 @@
 
 .action {
   padding: 0px 25px 20px;
+  display: flex;
+  gap: 12px;
 
   button {
     flex: 1;
@@ -44,4 +46,25 @@
   background-color: lime !important; /* Lime background */
   color: black !important; /* Black font color */
   text-transform: none; /* Prevent uppercase text */
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .action {
+    flex-direction: column;
+    padding: 0 0 16px;
+  }
+
+  .example-radio-group {
+    margin: 8px 0 12px;
+  }
+
+  .thumbnail {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+  }
 }
