@@ -4,6 +4,12 @@ import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
 import { ActivatedRoute } from '@angular/router';
 import { CarImagesService } from 'src/app/services/car-images.service';
+import {
+  buildEstimatedValueHistory,
+  getMostRecentEstimatedValue,
+  normalizeEstimatedValueHistory,
+  EstimatedValueEntry,
+} from '../../models/estimated-value.model';
 
 @Component({
   selector: 'app-car-edit',
@@ -13,8 +19,10 @@ import { CarImagesService } from 'src/app/services/car-images.service';
 })
 export class CarEditComponent implements OnInit {
   carForm: FormGroup;
-  id: number;
-  image = "";
+  id!: number;
+  image = '';
+  private estimatedValueHistory: EstimatedValueEntry[] = [];
+  showEstimatedValueHistory = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -46,8 +54,13 @@ export class CarEditComponent implements OnInit {
   getCarById() {
     this._carService.getCarById(this.id).subscribe({
       next: (res) => {
-        this.carForm.patchValue(res);
+        this.estimatedValueHistory = normalizeEstimatedValueHistory(res.EstimatedValue);
+        this.carForm.patchValue({
+          ...res,
+          EstimatedValue: getMostRecentEstimatedValue(this.estimatedValueHistory),
+        });
         this.image = res.Image ?? '';
+        this.cdr.detectChanges();
       },
       error: console.log,
     });
@@ -55,11 +68,26 @@ export class CarEditComponent implements OnInit {
 
   onFormSubmit() {
     if (this.carForm.valid) {
+      const formValue = this.carForm.value;
+      const payload = {
+        ...formValue,
+        EstimatedValue: buildEstimatedValueHistory(this.estimatedValueHistory, Number(formValue.EstimatedValue)),
+      };
+
       this._carService
-        .updateCar(this.id, this.carForm.value)
+        .updateCar(this.id, payload)
         .subscribe({
           next: () => {
+            const refreshedHistory = normalizeEstimatedValueHistory(payload.EstimatedValue);
             this._coreService.openSnackBar('Car detail updated!');
+            this.estimatedValueHistory = refreshedHistory;
+            this.carForm.patchValue(
+              {
+                EstimatedValue: getMostRecentEstimatedValue(refreshedHistory),
+              },
+              { emitEvent: false }
+            );
+            this.cdr.detectChanges();
           },
           error: (err: any) => {
             console.error(err);
@@ -84,4 +112,16 @@ export class CarEditComponent implements OnInit {
       reader.onload = () => resolve(reader.result as string)
       reader.onerror = (error) => reject(error)
     })
+
+  getEstimatedValueHistory(): EstimatedValueEntry[] {
+    return this.estimatedValueHistory;
+  }
+
+  hasEstimatedValueHistory(): boolean {
+    return this.estimatedValueHistory.length > 0;
+  }
+
+  toggleEstimatedValueHistory() {
+    this.showEstimatedValueHistory = !this.showEstimatedValueHistory;
+  }
 }

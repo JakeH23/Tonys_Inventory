@@ -1,0 +1,67 @@
+.bulk-shell {
+  padding: 24px 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bulk-header {
+  margin-bottom: 16px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.bulk-input-card,
+.preview-card,
+.result-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.preview-card,
+.result-card {
+  margin-top: 16px;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.csv-field {
+  width: 100%;
+}
+
+.parse-message {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.invalid-cell {
+  color: #b91c1c;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .bulk-actions {
+    button {
+      width: 100%;
+    }
+  }
+}

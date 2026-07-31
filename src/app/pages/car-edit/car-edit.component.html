@@ -33,6 +33,26 @@
                             <mat-label>Estimated Value</mat-label>
                             <input matInput type="number" placeholder="Ex. 50" formControlName="EstimatedValue">
                         </mat-form-field>
+                        <div class="estimated-history" *ngIf="hasEstimatedValueHistory()">
+                            <button
+                                type="button"
+                                mat-stroked-button
+                                class="history-btn"
+                                (click)="toggleEstimatedValueHistory()">
+                                {{ showEstimatedValueHistory ? 'Hide value history' : 'Show value history' }}
+                            </button>
+
+                            <div class="history-list" *ngIf="showEstimatedValueHistory">
+                                <div class="history-title">Estimated value history</div>
+                                <div class="history-item" *ngFor="let entry of getEstimatedValueHistory(); let i = index">
+                                    <span>{{ entry.DateChanged | date:'medium' }}</span>
+                                    <span>
+                                        £{{ entry.EstimatedCost }}
+                                        <strong *ngIf="i === 0">(Latest)</strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

@@ -1,0 +1,99 @@
+<div class="bulk-shell">
+  <div class="bulk-header">
+    <h1>Bulk update car values</h1>
+    <p>Upload or paste CSV rows to append new estimated value history entries for multiple cars.</p>
+  </div>
+
+  <div class="bulk-input-card">
+    <div class="bulk-actions">
+      <input type="file" accept=".csv,text/csv" (change)="onFileSelected($event)" #fileUpload hidden>
+      <button mat-raised-button color="primary" type="button" (click)="fileUpload.click()">Upload CSV</button>
+      <button mat-stroked-button type="button" (click)="parseCsv()">Preview rows</button>
+      <button mat-raised-button color="accent" type="button" (click)="runBulkUpdate()" [disabled]="!validRows.length || isSubmitting">
+        Run bulk update
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" class="csv-field">
+      <mat-label>CSV input</mat-label>
+      <textarea
+        matInput
+        rows="10"
+        [value]="csvText"
+        (input)="onCsvInputEvent($event)"
+        placeholder="Id,EstimatedCost,DateChanged&#10;1,190.5,2026-07-31T08:00:00.000Z&#10;2,45">
+      </textarea>
+    </mat-form-field>
+
+    <p class="parse-message">{{ parseMessage || 'Use headers: Id, EstimatedCost, DateChanged (optional).' }}</p>
+  </div>
+
+  <div class="preview-card" *ngIf="parsedRows.length">
+    <h2>Preview</h2>
+    <div class="table-wrap">
+      <table mat-table [dataSource]="parsedRows">
+        <ng-container matColumnDef="rowNumber">
+          <th mat-header-cell *matHeaderCellDef>Row</th>
+          <td mat-cell *matCellDef="let row">{{ row.rowNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let row">{{ row.idRaw }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estimatedCost">
+          <th mat-header-cell *matHeaderCellDef>EstimatedCost</th>
+          <td mat-cell *matCellDef="let row">{{ row.estimatedCostRaw }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateChanged">
+          <th mat-header-cell *matHeaderCellDef>DateChanged</th>
+          <td mat-cell *matCellDef="let row">{{ row.dateChangedRaw || 'Now' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let row" [class.invalid-cell]="!row.valid">
+            <span *ngIf="row.valid">Valid</span>
+            <span *ngIf="!row.valid">{{ row.errors.join(' ') }}</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="result-card" *ngIf="apiResult">
+    <h2>Update result</h2>
+    <p>Total received: {{ apiResult.totalReceived }}</p>
+    <p>Total validated: {{ apiResult.totalValidated }}</p>
+    <p>Total applied: {{ apiResult.totalApplied }}</p>
+    <p>Matched: {{ apiResult.matchedCount }}</p>
+    <p>Modified: {{ apiResult.modifiedCount }}</p>
+
+    <div class="table-wrap" *ngIf="apiResult.results.length">
+      <table mat-table [dataSource]="apiResult.results">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id</th>
+          <td mat-cell *matCellDef="let row">{{ row.Id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="updated">
+          <th mat-header-cell *matHeaderCellDef>Updated</th>
+          <td mat-cell *matCellDef="let row">{{ row.updated ? 'Yes' : 'No' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="reason">
+          <th mat-header-cell *matHeaderCellDef>Reason</th>
+          <td mat-cell *matCellDef="let row">{{ row.reason || '-' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['id', 'updated', 'reason']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id', 'updated', 'reason'];"></tr>
+      </table>
+    </div>
+  </div>
+</div>

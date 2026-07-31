@@ -3,6 +3,38 @@ const router = express.Router();
 const Car = require('../models/car');
 const config = require('../config/database');
 
+// Route to bulk update estimated values for cars
+router.post('/bulk-estimated-values', async (req, res, next) => {
+  try {
+    const updates = req.body?.updates;
+    const skipIfSame = req.body?.skipIfSame !== false;
+
+    if (!Array.isArray(updates) || !updates.length) {
+      return res.status(400).json({
+        success: false,
+        msg: 'Payload must include a non-empty updates array.',
+        example: {
+          updates: [
+            { Id: 1, EstimatedCost: 190, DateChanged: '2026-07-31T08:00:00.000Z' },
+            { Id: 2, EstimatedCost: 45.5 },
+          ],
+          skipIfSame: true,
+        },
+      });
+    }
+
+    const result = await Car.bulkUpdateEstimatedValues(updates, { skipIfSame });
+
+    res.json({
+      success: true,
+      msg: 'Bulk estimated value update processed.',
+      ...result,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Route to get a car by ID
 router.get('/:id', async (req, res, next) => {
   try {

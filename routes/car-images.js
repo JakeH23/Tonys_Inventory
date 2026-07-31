@@ -4,15 +4,18 @@ const CarImage = require('../models/car-image');
 const Car = require('../models/car');
 const cloudinary = require('cloudinary').v2;
 
-// Route to get random car images
-router.get('/', (req, res, next) => {
+const sendRandomCarImages = (req, res) => {
   CarImage.getRandomCarImages((err, carImages) => {
     if (err) {
       return res.status(500).json({ success: false, msg: 'Failed to retrieve random cars', error: err });
     }
     res.json({ success: true, carImages: carImages });
   });
-});
+};
+
+// Route to get random car images
+router.get('/', sendRandomCarImages);
+router.get('/random', sendRandomCarImages);
 
 // Route to upload an image to Cloudinary
 router.post('/', async (req, res, next) => {

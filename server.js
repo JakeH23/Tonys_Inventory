@@ -4,12 +4,21 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 const cloudinary = require('cloudinary').v2;
-const compression = require('compression')
+const compression = require('compression');
+const Car = require('./models/car');
 
 mongoose.connect(config.database);
 // On Connection
 mongoose.connection.on('connected', () => {
   console.log('Connected to Database ' + config.database);
+  Car.migrateLegacyEstimatedValues()
+    .then((result) => {
+      const modifiedCount = result?.modifiedCount || 0;
+      console.log('Estimated value history migration complete. Updated cars: ' + modifiedCount);
+    })
+    .catch((err) => {
+      console.error('Estimated value history migration failed:', err);
+    });
 });
 // On Error
 mongoose.connection.on('error', (err) => {
@@ -25,7 +34,7 @@ cloudinary.config({
 });
 
 const app = express();
-app.use(compression())
+app.use(compression());
 
 const cars = require('./routes/cars');
 const statistics = require('./routes/statistics');

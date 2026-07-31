@@ -7,7 +7,9 @@
     "build": "ng build --configuration production",
     "heroku-postbuild": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "migrate:estimated-value": "node scripts/migrate-estimated-value-history.js",
+    "migrate:estimated-value:dry-run": "node scripts/migrate-estimated-value-history.js --dry-run"
   },
   "engines": {
     "node": "22.9.0",

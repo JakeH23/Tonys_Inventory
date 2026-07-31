@@ -3,6 +3,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { StatsService } from '../../services/stats.service';
 import { CarImage } from '../../components/carousel/carousel.interface';
 import { CarImagesService } from '../../services/car-images.service';
+import { Car } from '../../models/car.model';
+import { getMostRecentEstimatedValue } from '../../models/estimated-value.model';
 
 @Component({
   selector: 'app-stats-home',
@@ -87,17 +89,35 @@ export class StatsHomeComponent implements OnInit {
     });
   }
 
-  exportInventory() {
-    this._statsService.exportInventory().subscribe({
+  exportCars() {
+    this._statsService.exportCars().subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.href = url;
-        anchor.download = 'inventory.csv';
+        anchor.download = 'cars-export.csv';
         anchor.click();
         window.URL.revokeObjectURL(url);
       },
       error: console.log,
     });
+  }
+
+  exportParts() {
+    this._statsService.exportParts().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'parts-export.csv';
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: console.log,
+    });
+  }
+
+  getCurrentEstimatedValue(car: Car): number {
+    return getMostRecentEstimatedValue(car?.EstimatedValue);
   }
 }

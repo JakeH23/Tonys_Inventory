@@ -46,7 +46,25 @@
 
       <ng-container matColumnDef="estimatedValue">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Value </th>
-        <td mat-cell *matCellDef="let row"> £{{row.EstimatedValue}}</td>
+        <td mat-cell *matCellDef="let row">
+          <div class="estimated-value-cell">
+            <div class="estimated-value-current">£{{ getCurrentEstimatedValue(row) }}</div>
+            <button
+              type="button"
+              mat-stroked-button
+              class="history-btn"
+              *ngIf="hasEstimatedValueHistory(row)"
+              (click)="toggleEstimatedValueHistory(row)">
+              {{ expandedHistoryCarId === row.Id ? 'Hide history' : 'History' }}
+            </button>
+            <div class="estimated-value-history" *ngIf="expandedHistoryCarId === row.Id">
+              <div class="history-row" *ngFor="let entry of getEstimatedValueHistory(row)">
+                <span>{{ entry.DateChanged | date:'mediumDate' }}</span>
+                <span>£{{ entry.EstimatedCost }}</span>
+              </div>
+            </div>
+          </div>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="boxed">

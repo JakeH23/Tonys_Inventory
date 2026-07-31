@@ -126,6 +126,46 @@
   color: red !important;
 }
 
+.estimated-value-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.estimated-value-current {
+  font-weight: 600;
+}
+
+.history-btn {
+  line-height: 28px;
+  min-height: 28px;
+  padding: 0 10px;
+  font-size: 0.75rem;
+}
+
+.estimated-value-history {
+  width: 100%;
+  min-width: 170px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 8px;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+}
+
+.history-row + .history-row {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid #e2e8f0;
+}
+
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;

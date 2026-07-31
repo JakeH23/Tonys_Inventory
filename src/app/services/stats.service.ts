@@ -29,7 +29,11 @@ export class StatsService {
     return this._http.get(this.buildUrl('api/statistics/report'), { headers: this.headers });
   }
 
-  exportInventory(): Observable<Blob> {
-    return this._http.get(this.buildUrl('api/statistics/export'), { headers: this.headers, responseType: 'blob' });
+  exportCars(): Observable<Blob> {
+    return this._http.get(this.buildUrl('api/statistics/export/cars'), { headers: this.headers, responseType: 'blob' });
+  }
+
+  exportParts(): Observable<Blob> {
+    return this._http.get(this.buildUrl('api/statistics/export/parts'), { headers: this.headers, responseType: 'blob' });
   }
 }

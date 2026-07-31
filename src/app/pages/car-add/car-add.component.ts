@@ -6,6 +6,11 @@ import { CarService } from '../../services/car.service';
 import { CarImagesService } from '../../services/car-images.service';
 import { CarImage } from '../../../../src/app/components/carousel/carousel.interface';
 import { BoxedChoice } from '../../../../src/app/models/BoxedChoice';
+import {
+  buildEstimatedValueHistory,
+  getMostRecentEstimatedValue,
+  normalizeEstimatedValueHistory,
+} from '../../../../src/app/models/estimated-value.model';
 
 @Component({
   selector: 'app-car-add',
@@ -42,7 +47,11 @@ export class CarAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carForm.patchValue(this.data);
+    const estimatedValue = getMostRecentEstimatedValue(this.data?.EstimatedValue);
+    this.carForm.patchValue({
+      ...this.data,
+      EstimatedValue: estimatedValue,
+    });
   }
 
   onFormSubmit() {
@@ -52,8 +61,17 @@ export class CarAddComponent implements OnInit {
       return;
     }
 
+    const formValue = this.carForm.value;
+    const payload = {
+      ...formValue,
+      EstimatedValue: buildEstimatedValueHistory(
+        normalizeEstimatedValueHistory(this.data?.EstimatedValue),
+        Number(formValue.EstimatedValue)
+      ),
+    };
+
     if (this.carForm.controls['Id'].value != '') {
-      this._carService.updateCar(this.carForm.controls['Id'].value, this.carForm.value).subscribe({
+      this._carService.updateCar(this.carForm.controls['Id'].value, payload).subscribe({
         next: () => {
           this._coreService.openSnackBar('Car updated successfully');
           this._dialogRef.close(this.carForm.controls['Id'].value);
@@ -64,7 +82,7 @@ export class CarAddComponent implements OnInit {
         },
       });
     } else {
-      this._carService.addCar(this.carForm.value).subscribe({
+      this._carService.addCar(payload).subscribe({
         next: (res) => {
           this._coreService.openSnackBar('Car added successfully');
           this._dialogRef.close(res.id);

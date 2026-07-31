@@ -27,6 +27,17 @@ export class CarService {
     return this._http.put(this.buildUrl(`api/cars/${id}`), data, { headers: this.headers });
   }
 
+  bulkUpdateEstimatedValues(
+    updates: Array<{ Id: number; EstimatedCost: number; DateChanged?: string }>,
+    skipIfSame = true
+  ): Observable<any> {
+    return this._http.post(
+      this.buildUrl('api/cars/bulk-estimated-values'),
+      { updates, skipIfSame },
+      { headers: this.headers }
+    );
+  }
+
   getCarList(query?: InventoryQuery): Observable<PaginatedResponse<Car> | Car[]> {
     const params = this.buildQueryParams(query);
     return this._http.get<PaginatedResponse<Car> | Car[]>(this.buildUrl('api/cars'), { headers: this.headers, params });

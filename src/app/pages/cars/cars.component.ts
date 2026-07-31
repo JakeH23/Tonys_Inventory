@@ -12,6 +12,11 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CarListStateService } from 'src/app/services/car-list-state.service';
 import { Car } from 'src/app/models/car.model';
+import {
+  EstimatedValueEntry,
+  getMostRecentEstimatedValue,
+  normalizeEstimatedValueHistory,
+} from 'src/app/models/estimated-value.model';
 
 interface QueryParams {
   filter?: string | null;
@@ -45,6 +50,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   hasError = false;
   errorMessage = '';
   activeFilterLabel = 'All cars';
+  expandedHistoryCarId: number | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -259,8 +265,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     const direction = this.sort?.direction === 'desc' ? -1 : 1;
 
     sorted.sort((a, b) => {
-      const aValue = (a as any)[sortField];
-      const bValue = (b as any)[sortField];
+      const aValue = this.getSortValue(a, sortField);
+      const bValue = this.getSortValue(b, sortField);
       if (aValue == null && bValue == null) return 0;
       if (aValue == null) return 1;
       if (bValue == null) return -1;
@@ -273,6 +279,28 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     return sorted;
+  }
+
+  private getSortValue(car: Car, sortField: string) {
+    switch (sortField) {
+      case 'make':
+      case 'Make':
+        return car.Make;
+      case 'model':
+      case 'Model':
+        return car.Model;
+      case 'manufacturersCode':
+      case 'ManufacturersCode':
+        return car.ManufacturersCode;
+      case 'estimatedValue':
+      case 'EstimatedValue':
+        return this.getCurrentEstimatedValue(car);
+      case 'boxed':
+      case 'Boxed':
+        return car.Boxed ? 1 : 0;
+      default:
+        return (car as any)[sortField];
+    }
   }
 
   private applyClientFilter(cars: Car[]): Car[] {
@@ -299,7 +327,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
         car.ManufacturersCode,
         car.Make,
         car.Model,
-        car.EstimatedValue,
+        this.getCurrentEstimatedValue(car),
         car.Boxed,
         car.Notes,
         car.Image,
@@ -348,7 +376,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       data.ManufacturersCode,
       data.Make,
       data.Model,
-      data.EstimatedValue,
+      this.getCurrentEstimatedValue(data),
       data.Boxed,
       data.Notes,
       data.Image,
@@ -437,6 +465,27 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
     });
+  }
+
+  getCurrentEstimatedValue(car: Car): number {
+    return getMostRecentEstimatedValue(car.EstimatedValue);
+  }
+
+  getEstimatedValueHistory(car: Car): EstimatedValueEntry[] {
+    return normalizeEstimatedValueHistory(car.EstimatedValue);
+  }
+
+  hasEstimatedValueHistory(car: Car): boolean {
+    return this.getEstimatedValueHistory(car).length > 1;
+  }
+
+  toggleEstimatedValueHistory(car: Car) {
+    const carId = car.Id ?? null;
+    if (carId == null) {
+      return;
+    }
+
+    this.expandedHistoryCarId = this.expandedHistoryCarId === carId ? null : carId;
   }
 
   ngOnDestroy(): void {

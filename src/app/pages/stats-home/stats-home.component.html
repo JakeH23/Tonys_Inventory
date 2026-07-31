@@ -4,7 +4,10 @@
       <h1>Inventory dashboard</h1>
       <p>Monitor your collection, spot high-value items, and export your data in one place.</p>
     </div>
-    <button mat-raised-button color="primary" (click)="exportInventory()">Export inventory</button>
+    <div class="export-actions">
+      <button mat-raised-button color="primary" (click)="exportCars()">Export cars</button>
+      <button mat-raised-button color="accent" (click)="exportParts()">Export parts</button>
+    </div>
   </div>
 
   <div class="flex-grid-quarters">
@@ -72,7 +75,7 @@
         </ng-container>
         <ng-container matColumnDef="estimatedValue">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Value </th>
-          <td mat-cell *matCellDef="let row"> £{{row.EstimatedValue}}</td>
+          <td mat-cell *matCellDef="let row"> £{{ getCurrentEstimatedValue(row) }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
