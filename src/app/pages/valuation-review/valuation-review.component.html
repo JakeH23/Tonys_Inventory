@@ -35,7 +35,7 @@
         <h3>Stale valuation items</h3>
         <p class="section-subtitle">Use quick actions to check market pricing and keep value history current.</p>
       </div>
-      <button mat-stroked-button type="button" (click)="getInventoryAlerts()">Refresh list</button>
+      <button mat-stroked-button type="button" class="stale-secondary-btn" (click)="getInventoryAlerts()">Refresh list</button>
     </div>
 
     <div class="stale-review-list">
@@ -50,10 +50,10 @@
         </div>
 
         <div class="stale-actions">
-          <button mat-stroked-button type="button" (click)="copyCarName(item)">Copy name</button>
-          <button mat-stroked-button type="button" (click)="openGoogleValuationSearch(item)">Search Google</button>
+          <button mat-stroked-button type="button" class="stale-secondary-btn" (click)="copyCarName(item)">Copy name</button>
+          <button mat-stroked-button type="button" class="stale-secondary-btn" (click)="openGoogleValuationSearch(item)">Search Google</button>
 
-          <mat-form-field appearance="outline" class="stale-value-input">
+          <mat-form-field appearance="outline" class="stale-value-input value-input-lg">
             <mat-label>New value</mat-label>
             <input
               matInput
@@ -66,7 +66,7 @@
 
           <button
             mat-raised-button
-            color="primary"
+            class="stale-primary-btn"
             type="button"
             [disabled]="isSavingStaleReview(item.Id)"
             (click)="updateStaleValuation(item)">
@@ -75,6 +75,7 @@
 
           <button
             mat-raised-button
+            class="stale-secondary-fill-btn"
             type="button"
             [disabled]="isSavingStaleReview(item.Id)"
             (click)="dismissStaleValuation(item)">

@@ -6,11 +6,11 @@
 
 .surface-panel {
   margin-top: 16px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #84cc16;
   border-radius: 14px;
-  background: #ffffff;
+  background: #0f0f0f;
   padding: 14px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .valuation-review-header {
@@ -24,11 +24,11 @@
 
 .valuation-review-header p {
   margin: 0;
-  color: rgba(0, 0, 0, 0.7);
+  color: #d4d4d8;
 }
 
 .stale-review {
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .stale-review-header-row {
@@ -38,7 +38,7 @@
   gap: 12px;
   margin-bottom: 12px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #2a2a2a;
 }
 
 .stale-review-header-row h3 {
@@ -47,7 +47,7 @@
 
 .section-subtitle {
   margin: 0;
-  color: #64748b;
+  color: #d4d4d8;
   font-size: 0.9rem;
 }
 
@@ -58,10 +58,10 @@
 }
 
 .stale-review-row {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #2a2a2a;
   border-radius: 10px;
   padding: 10px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: #161616;
 }
 
 .stale-car-title {
@@ -72,7 +72,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #475569;
+  color: #d4d4d8;
   margin-top: 4px;
 }
 
@@ -85,7 +85,27 @@
 }
 
 .stale-value-input {
-  width: 130px;
+  width: 132px;
+}
+
+.value-input-lg {
+  min-width: 132px;
+}
+
+.stale-primary-btn {
+  background: #a3e635 !important;
+  color: #000000 !important;
+}
+
+.stale-secondary-btn {
+  border-color: #84cc16 !important;
+  color: #ffffff !important;
+  background: #161616 !important;
+}
+
+.stale-secondary-fill-btn {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
 }
 
 @media (max-width: 768px) {

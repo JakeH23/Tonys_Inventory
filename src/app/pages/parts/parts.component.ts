@@ -46,7 +46,12 @@ export class PartsComponent implements OnInit {
   }
 
   openAddPartForm() {
-    const dialogRef = this._dialog.open(PartAddComponent);
+    const dialogRef = this._dialog.open(PartAddComponent, {
+      width: 'min(960px, 95vw)',
+      maxWidth: '95vw',
+      panelClass: 'theme-dialog-panel',
+      autoFocus: false,
+    });
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {

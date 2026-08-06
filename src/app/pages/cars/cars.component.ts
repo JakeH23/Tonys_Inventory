@@ -32,6 +32,7 @@ interface QueryParams {
   styleUrls: ['./cars.component.scss'],
 })
 export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
+  selectedQuickFilter: 'all' | 'boxed' | 'unboxed' | 'recent' = 'all';
   displayedColumns: string[] = [
     'make',
     'model',
@@ -81,7 +82,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filterValue = hasQueryState ? (qp.filter ?? cached.filter ?? '') : '';
       this.pageIndex = hasQueryState ? (qp.pageIndex ?? cached.pageIndex ?? 0) : 0;
       this.pageSize = hasQueryState ? (qp.pageSize ?? cached.pageSize ?? 15) : 15;
-      this.activeFilterLabel = this.filterValue ? `Filtered by “${this.filterValue}”` : 'All cars';
+      this.selectedQuickFilter = 'all';
+      this.updateActiveFilterLabel();
       this.filterControl.setValue(this.filterValue, { emitEvent: false });
 
       this.getCarList(qp);
@@ -93,7 +95,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((value: string | null) => {
         this.filterValue = value ?? '';
         this.pageIndex = 0;
-        this.activeFilterLabel = this.filterValue ? `Filtered by “${this.filterValue}”` : 'All cars';
+        this.updateActiveFilterLabel();
         this.stateService.setState({ filter: this.filterValue, pageIndex: 0 });
         this.updateQueryParams({ filter: this.filterValue || null, pageIndex: 0 });
         if (this.allCars.length) {
@@ -135,7 +137,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   clearFilters() {
     this.filterControl.setValue('', { emitEvent: false });
     this.filterValue = '';
-    this.activeFilterLabel = 'All cars';
+    this.selectedQuickFilter = 'all';
+    this.updateActiveFilterLabel();
     this.pageIndex = 0;
     this.stateService.setState({ filter: '', pageIndex: 0 });
     this.updateQueryParams({ filter: null, pageIndex: 0 });
@@ -160,7 +163,12 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openAddCarForm() {
-    const dialogRef = this._dialog.open(CarAddComponent);
+    const dialogRef = this._dialog.open(CarAddComponent, {
+      width: 'min(960px, 95vw)',
+      maxWidth: '95vw',
+      panelClass: 'theme-dialog-panel',
+      autoFocus: false,
+    });
     dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
@@ -194,7 +202,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       sortBy: activeSort,
       sortDirection: activeDirection,
       search: this.filterValue,
-      filter: this.activeFilterLabel === 'Boxed cars' ? 'boxed' : this.activeFilterLabel === 'Unboxed cars' ? 'unboxed' : undefined,
+      filter: this.selectedQuickFilter === 'boxed' ? 'boxed' : this.selectedQuickFilter === 'unboxed' ? 'unboxed' : undefined,
     }).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res) => {
         const payload = this.normalizeResponse(res);
@@ -310,11 +318,11 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   private applyClientFilter(cars: Car[]): Car[] {
     let filteredCars = [...cars];
 
-    if (this.activeFilterLabel === 'Boxed cars') {
+    if (this.selectedQuickFilter === 'boxed') {
       filteredCars = filteredCars.filter((car) => !!car.Boxed);
-    } else if (this.activeFilterLabel === 'Unboxed cars') {
+    } else if (this.selectedQuickFilter === 'unboxed') {
       filteredCars = filteredCars.filter((car) => !car.Boxed);
-    } else if (this.activeFilterLabel === 'Recently added cars') {
+    } else if (this.selectedQuickFilter === 'recent') {
       filteredCars = filteredCars
         .slice()
         .sort((a, b) => (b.Id ?? 0) - (a.Id ?? 0))
@@ -373,7 +381,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyFilterToTable(filterValue: string) {
     this.filterValue = filterValue.trim();
-    this.activeFilterLabel = this.filterValue ? `Filtered by “${this.filterValue}”` : 'All cars';
+    this.updateActiveFilterLabel();
     this.pageIndex = 0;
     this.getCarList();
   }
@@ -413,7 +421,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Filter rows by `Boxed` boolean
   filterBoxed(boxed: boolean) {
     this.pageIndex = 0;
-    this.activeFilterLabel = boxed ? 'Boxed cars' : 'Unboxed cars';
+    this.selectedQuickFilter = boxed ? 'boxed' : 'unboxed';
+    this.updateActiveFilterLabel();
     this.stateService.setState({ pageIndex: 0, pageSize: this.pageSize });
     this.updateQueryParams({ pageIndex: 0, pageSize: this.pageSize });
     if (this.allCars.length) {
@@ -426,7 +435,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Filter to recently added cars (heuristic: highest 10 Ids)
   filterRecentlyAdded() {
     this.pageIndex = 0;
-    this.activeFilterLabel = 'Recently added cars';
+    this.selectedQuickFilter = 'recent';
+    this.updateActiveFilterLabel();
     this.stateService.setState({ pageIndex: 0, pageSize: this.pageSize });
     this.updateQueryParams({ pageIndex: 0, pageSize: this.pageSize });
     if (this.allCars.length) {
@@ -501,6 +511,25 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.expandedHistoryCarId = this.expandedHistoryCarId === carId ? null : carId;
+  }
+
+  private updateActiveFilterLabel() {
+    const segments: string[] = [];
+
+    if (this.selectedQuickFilter === 'boxed') {
+      segments.push('Boxed cars');
+    } else if (this.selectedQuickFilter === 'unboxed') {
+      segments.push('Unboxed cars');
+    } else if (this.selectedQuickFilter === 'recent') {
+      segments.push('Recently added cars');
+    }
+
+    const normalizedSearch = this.filterValue.trim();
+    if (normalizedSearch) {
+      segments.push(`Search: “${normalizedSearch}”`);
+    }
+
+    this.activeFilterLabel = segments.length ? segments.join(' • ') : 'All cars';
   }
 
   ngOnDestroy(): void {

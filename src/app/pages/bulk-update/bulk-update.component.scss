@@ -14,17 +14,17 @@
 
   p {
     margin: 0;
-    color: rgba(0, 0, 0, 0.7);
+    color: #d4d4d8;
   }
 }
 
 .bulk-input-card,
 .preview-card,
 .result-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid #84cc16;
   border-radius: 12px;
   padding: 16px;
-  background: #ffffff;
+  background: #0f0f0f;
 }
 
 .preview-card,
@@ -46,7 +46,7 @@
 .parse-message {
   margin: 0;
   font-size: 0.9rem;
-  color: #334155;
+  color: #d4d4d8;
 }
 
 .table-wrap {
@@ -54,7 +54,7 @@
 }
 
 .invalid-cell {
-  color: #b91c1c;
+  color: #f87171;
   font-weight: 500;
 }
 

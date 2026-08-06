@@ -4,7 +4,7 @@
       <h1>Parts</h1>
       <p class="page-subtitle">Filter parts quickly by text, category, or vehicle side.</p>
     </div>
-    <button mat-raised-button color="primary" class="primary-action" (click)="openAddPartForm()">Add part</button>
+    <button mat-raised-button type="button" class="primary-action lime-btn" (click)="openAddPartForm()">Add part</button>
   </div>
 
   <div class="filter-container">
@@ -42,7 +42,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-stroked-button color="accent" class="clear-button" (click)="clearFilters()">
+    <button mat-stroked-button type="button" class="clear-button" (click)="clearFilters()">
       <mat-icon>clear_all</mat-icon>
       Clear filters
     </button>

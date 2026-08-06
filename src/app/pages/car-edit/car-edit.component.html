@@ -1,89 +1,101 @@
-<div class="main-body">
-    <form [formGroup]="carForm" (ngSubmit)="onFormSubmit()">
-        <div class="row">
-            <div class="column form-column">
-                <div class="row">
+<div class="edit-shell">
+    <form [formGroup]="carForm" (ngSubmit)="onFormSubmit()" class="edit-form">
+        <header class="edit-header">
+            <div>
+                <h1>Edit Car</h1>
+                <p>Update core details, valuation, and image in one place.</p>
+            </div>
+            <div class="action-bar action-bar-top">
+                <button mat-stroked-button type="button" class="ghost-btn" (click)="onCancel()">Back</button>
+                <button mat-raised-button class="lime-btn" type="submit">Save changes</button>
+            </div>
+        </header>
+
+        <div class="layout-grid">
+            <section class="panel details-panel">
+                <h2>Details</h2>
+
+                <div class="field-grid two-col">
                     <mat-form-field appearance="outline">
                         <mat-label>Manufacturers Code</mat-label>
                         <input matInput type="text" placeholder="Ex. C2878" formControlName="ManufacturersCode">
                     </mat-form-field>
-                </div>
-                <div class="row">
+
                     <mat-form-field appearance="outline">
                         <mat-label>Make</mat-label>
                         <input matInput type="text" placeholder="Ex. Scalextric" formControlName="Make">
                     </mat-form-field>
                 </div>
-                <div class="row">
+
+                <div class="field-grid two-col">
                     <mat-form-field appearance="outline">
                         <mat-label>Model</mat-label>
                         <input matInput type="text" placeholder="Ex. Porsche" formControlName="Model">
                     </mat-form-field>
-                </div>
-                <div class="row">
-                    <div class="column">
-                        <mat-radio-group aria-label="Select an option" formControlName="Boxed">
-                            <mat-label><b>Boxed?</b></mat-label>
-                            <mat-radio-button [value]=true>Yes</mat-radio-button>
-                            <mat-radio-button [value]=false>No</mat-radio-button>
-                        </mat-radio-group>
-                    </div>
-                    <div class="column">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Estimated Value</mat-label>
-                            <input matInput type="number" placeholder="Ex. 50" formControlName="EstimatedValue">
-                        </mat-form-field>
-                        <div class="estimated-history" *ngIf="hasEstimatedValueHistory()">
-                            <button
-                                type="button"
-                                mat-stroked-button
-                                class="history-btn"
-                                (click)="toggleEstimatedValueHistory()">
-                                {{ showEstimatedValueHistory ? 'Hide value history' : 'Show value history' }}
-                            </button>
 
-                            <div class="history-list" *ngIf="showEstimatedValueHistory">
-                                <div class="history-title">Estimated value history</div>
-                                <div class="history-item" *ngFor="let entry of getEstimatedValueHistory(); let i = index">
-                                    <span>{{ entry.DateChanged | date:'medium' }}</span>
-                                    <span>
-                                        £{{ entry.EstimatedCost }}
-                                        <strong *ngIf="i === 0">(Latest)</strong>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <mat-form-field appearance="outline">
-                        <mat-label>Notes</mat-label>
-                        <textarea rows="3" matInput placeholder="Ex. 4" formControlName="Notes"></textarea>
+                        <mat-label>Estimated Value</mat-label>
+                        <input matInput type="number" placeholder="Ex. 50" formControlName="EstimatedValue">
                     </mat-form-field>
                 </div>
-            </div>
-            <div class="column image-column">
-                <div class="row pt-2 ml-0">
-                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
-                    <div class="file-upload">
-                        <div *ngIf="!image">
-                            No file uploaded yet.
+
+                <section class="boxed-card">
+                    <div class="boxed-title">Boxed status</div>
+                    <mat-radio-group aria-label="Select boxed status" formControlName="Boxed" class="boxed-group">
+                        <mat-radio-button class="boxed-option" [value]="true">Yes, boxed</mat-radio-button>
+                        <mat-radio-button class="boxed-option" [value]="false">No, unboxed</mat-radio-button>
+                    </mat-radio-group>
+                </section>
+
+                <div class="estimated-history" *ngIf="hasEstimatedValueHistory()">
+                    <button
+                        type="button"
+                        mat-stroked-button
+                        class="history-btn"
+                        (click)="toggleEstimatedValueHistory()">
+                        {{ showEstimatedValueHistory ? 'Hide value history' : 'Show value history' }}
+                    </button>
+
+                    <div class="history-list" *ngIf="showEstimatedValueHistory">
+                        <div class="history-title">Estimated value history</div>
+                        <div class="history-item" *ngFor="let entry of getEstimatedValueHistory(); let i = index">
+                            <span>{{ entry.DateChanged | date:'medium' }}</span>
+                            <span>
+                                £{{ entry.EstimatedCost }}
+                                <strong *ngIf="i === 0">(Latest)</strong>
+                            </span>
                         </div>
-                        <div *ngIf="image">
-                            <!-- <img [src]="'data:image/png;base64,'+image" class="display-image" alt="Car Image" /> -->
-                            <img [src]="image" class="display-image" alt="Car Image" />
-                        </div>
-                        <button type="button" mat-mini-fab color="primary" class="upload-btn lime-btn"
-                            (click)="fileUpload.click()">            
-                            <mat-icon>attach_file</mat-icon>
-                        </button>
                     </div>
                 </div>
-            </div>
+
+                <mat-form-field appearance="outline" class="notes-field">
+                    <mat-label>Notes</mat-label>
+                    <textarea rows="4" matInput placeholder="Add notes about condition, variants, or provenance" formControlName="Notes"></textarea>
+                </mat-form-field>
+            </section>
+
+            <aside class="panel media-panel">
+                <h2>Image</h2>
+                <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+                <div class="preview-frame" *ngIf="image">
+                    <img [src]="image" class="display-image" alt="Car Image" />
+                </div>
+
+                <div class="preview-empty" *ngIf="!image">
+                    No image uploaded yet.
+                </div>
+
+                <button type="button" mat-raised-button class="lime-btn upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                    Upload image
+                </button>
+            </aside>
         </div>
-        <div class="row action">
-            <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
-            <button mat-raised-button class="lime-btn" type="submit">Update</button>
+
+        <div class="action-bar action-bar-bottom">
+            <button mat-stroked-button type="button" class="ghost-btn" (click)="onCancel()">Back</button>
+            <button mat-raised-button class="lime-btn" type="submit">Save changes</button>
         </div>
     </form>
 </div>

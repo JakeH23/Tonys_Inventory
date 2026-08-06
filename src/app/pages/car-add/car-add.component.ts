@@ -22,6 +22,7 @@ export class CarAddComponent implements OnInit {
   carForm: FormGroup;
   carImage: CarImage | null = null;
   @ViewChild("fileInput") fileInput: any;
+  attemptedInvalidSubmit = false;
 
   readonly requiredControlNames = ['ManufacturersCode', 'Make', 'Model', 'EstimatedValue', 'Boxed'];
   readonly sectionRequiredControls: Record<'details' | 'valuation', string[]> = {
@@ -77,12 +78,19 @@ export class CarAddComponent implements OnInit {
     return `${validCount}/${controls.length} required complete`;
   }
 
+  get showValidationError(): boolean {
+    return this.attemptedInvalidSubmit && this.carForm.invalid;
+  }
+
   onFormSubmit() {
     if (this.carForm.invalid) {
+      this.attemptedInvalidSubmit = true;
       this.carForm.markAllAsTouched();
-      this._coreService.openSnackBar('Please complete the highlighted fields first.');
+      this._coreService.openSnackBar('Please complete the highlighted fields first.', 'Dismiss', 'error');
       return;
     }
+
+    this.attemptedInvalidSubmit = false;
 
     const formValue = this.carForm.value;
     const payload = {

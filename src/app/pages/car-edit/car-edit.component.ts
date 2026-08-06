@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreService } from '../../components/core/core.service';
 import { CarService } from '../../services/car.service';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { CarImagesService } from 'src/app/services/car-images.service';
 import {
   buildEstimatedValueHistory,
@@ -30,6 +31,7 @@ export class CarEditComponent implements OnInit {
     private _coreService: CoreService,
     private route: ActivatedRoute,
     private _carImagesService: CarImagesService,
+    private location: Location,
     private cdr: ChangeDetectorRef
   ) {
     this.route.params.subscribe(params => {
@@ -123,5 +125,9 @@ export class CarEditComponent implements OnInit {
 
   toggleEstimatedValueHistory() {
     this.showEstimatedValueHistory = !this.showEstimatedValueHistory;
+  }
+
+  onCancel() {
+    this.location.back();
   }
 }

@@ -4,19 +4,42 @@
       <h1>Slot cars</h1>
       <p class="page-subtitle">Browse, filter, and manage your collection with quick actions.</p>
     </div>
-    <button mat-raised-button color="primary" class="primary-action" (click)="openAddCarForm()">Add car</button>
+    <button mat-raised-button type="button" class="primary-action lime-btn" (click)="openAddCarForm()">Add car</button>
   </div>
 
   <div class="filter-toolbar">
     <div class="chip-group">
-      <button mat-stroked-button color="primary" (click)="filterBoxed(true)">Boxed</button>
-      <button mat-stroked-button color="accent" (click)="filterBoxed(false)">Unboxed</button>
-      <button mat-stroked-button color="warn" (click)="filterRecentlyAdded()">Recently added</button>
-      <button mat-button (click)="clearFilters()">Clear filters</button>
+      <button
+        mat-stroked-button
+        type="button"
+        class="filter-btn"
+        [class.filter-btn-active]="activeFilterLabel === 'Boxed cars'"
+        [attr.aria-pressed]="activeFilterLabel === 'Boxed cars'"
+        (click)="filterBoxed(true)">Boxed</button>
+      <button
+        mat-stroked-button
+        type="button"
+        class="filter-btn"
+        [class.filter-btn-active]="activeFilterLabel === 'Unboxed cars'"
+        [attr.aria-pressed]="activeFilterLabel === 'Unboxed cars'"
+        (click)="filterBoxed(false)">Unboxed</button>
+      <button
+        mat-stroked-button
+        type="button"
+        class="filter-btn"
+        [class.filter-btn-active]="activeFilterLabel === 'Recently added cars'"
+        [attr.aria-pressed]="activeFilterLabel === 'Recently added cars'"
+        (click)="filterRecentlyAdded()">Recently added</button>
+      <button
+        mat-stroked-button
+        type="button"
+        class="filter-btn clear-filter-btn"
+        [disableRipple]="true"
+        (click)="clearFilters()">Clear filters</button>
     </div>
     <mat-form-field appearance="outline">
       <mat-label>Search inventory</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Scalextric, Porsche, C2671, Matt" #input>
+      <input matInput [formControl]="filterControl" placeholder="Ex. Scalextric, Porsche, C2671, Matt" #input>
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>

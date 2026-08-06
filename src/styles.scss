@@ -1,5 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+    --theme-bg: #050505;
+    --theme-surface: #0f0f0f;
+    --theme-surface-soft: #161616;
+    --theme-border: #84cc16;
+    --theme-accent: #a3e635;
+    --theme-text: #ffffff;
+    --theme-text-muted: #d4d4d8;
+}
+
 html,
 body {
     height: 100%;
@@ -7,17 +17,19 @@ body {
 }
 
 .mat-icon {
-    color: black !important; /* Ensure all mat-icons are black */
+    color: inherit !important;
 }
 
 .card {
-    color: white !important;
-    background: black !important;
-    border: 2px lime solid !important;
+    color: var(--theme-text) !important;
+    background: var(--theme-surface) !important;
+    border: 2px solid var(--theme-border) !important;
 }
 
 body {
     margin: 0;
+    background: var(--theme-bg);
+    color: var(--theme-text);
 }
 
 .mat-typography,
@@ -30,13 +42,13 @@ body {
 .navbar-color,
 .mat-toolbar,
 .mat-toolbar-row {
-    background-color: black !important;
-    color: white !important;
-    --mat-toolbar-container-background-color: black !important;
+    background-color: var(--theme-bg) !important;
+    color: var(--theme-text) !important;
+    --mat-toolbar-container-background-color: var(--theme-bg) !important;
 }
 
 .router-link-active {
-    background-color: #414548;
+    background-color: #202020;
 }
 
 .no-border {
@@ -44,8 +56,8 @@ body {
 }
 
 .toolbar-color {
-    background-color: #616466;
-    color: white;
+    background-color: var(--theme-surface-soft);
+    color: var(--theme-text);
 }
 
 .center {
@@ -94,24 +106,80 @@ label {
 
 .selected {
     font-weight: bold; /* Highlight the active route */
-    color: #1976d2; /* Change color for active state */
+    color: var(--theme-accent); /* Change color for active state */
 }
 
 .custom-button {
-    background: lime !important;
+    background: var(--theme-accent) !important;
     border: none !important; /* Remove any border if needed */
-    margin-right: 8px !important;; /* Add spacing between buttons */
+    margin-right: 8px !important; /* Add spacing between buttons */
     text-transform: none; /* Prevent uppercase text */
-    color: black !important;; /* Set font color to black */
+    color: black !important; /* Set font color to black */
 }
 
 .custom-nav-button {
-    color: lime !important;
-    color: black !important;; /* Set icon color to black */
+    color: var(--theme-accent) !important;
 }
 
 .table-container {
-    border: 2px lime solid;
+    border: 2px solid var(--theme-border);
+}
+
+.mat-mdc-form-field .mdc-text-field--filled,
+.mat-mdc-form-field .mdc-text-field--outlined {
+    background-color: var(--theme-surface) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-input-element,
+.mat-mdc-form-field .mat-mdc-select-value,
+.mat-mdc-form-field .mat-mdc-select-arrow,
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mat-mdc-form-field-hint,
+.mat-mdc-form-field .mat-mdc-form-field-error {
+    color: var(--theme-text) !important;
+}
+
+.mat-mdc-form-field .mdc-notched-outline__leading,
+.mat-mdc-form-field .mdc-notched-outline__notch,
+.mat-mdc-form-field .mdc-notched-outline__trailing {
+    border-color: var(--theme-border) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: var(--theme-accent) !important;
+}
+
+.mat-mdc-table,
+.mat-mdc-row,
+.mat-mdc-header-row,
+.mat-mdc-footer-row {
+    background: var(--theme-surface) !important;
+    color: var(--theme-text) !important;
+}
+
+.mat-mdc-cell,
+.mat-mdc-header-cell,
+.mat-mdc-footer-cell {
+    color: var(--theme-text) !important;
+    border-bottom-color: #2a2a2a !important;
+}
+
+.mat-mdc-paginator {
+    background: var(--theme-surface) !important;
+    color: var(--theme-text) !important;
+}
+
+.theme-dialog-panel .mat-mdc-dialog-container {
+    background: transparent !important;
+    --mdc-dialog-container-color: var(--theme-surface);
+}
+
+.theme-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+    background: var(--theme-surface) !important;
+    color: var(--theme-text) !important;
+    border: 1px solid #ffffff;
 }
 
 .snackbar-info .mdc-snackbar__surface,

@@ -24,6 +24,13 @@ cdk-virtual-scroll-viewport {
 .clear-button {
   margin-top: -8px;
   min-height: 40px;
+  border-color: #84cc16 !important;
+  color: #ffffff !important;
+  background: #161616 !important;
+}
+
+.clear-button:hover {
+  background: #1f1f1f !important;
 }
 
 .results-pill {
@@ -31,9 +38,9 @@ cdk-virtual-scroll-viewport {
   align-items: center;
   min-height: 40px;
   border-radius: 999px;
-  border: 1px solid #d1d5db;
-  background: #f8fafc;
-  color: #334155;
+  border: 1px solid #84cc16;
+  background: #0f0f0f;
+  color: #d4d4d8;
   padding: 0 12px;
   font-size: 0.88rem;
   font-weight: 600;
@@ -71,12 +78,12 @@ cdk-virtual-scroll-viewport {
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid #d1d5db;
+  border: 1px solid #84cc16;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .flip-card-front {
-  background: #f8fafc;
+  background: #161616;
 }
 
 .flip-hint {
@@ -84,8 +91,8 @@ cdk-virtual-scroll-viewport {
   top: 10px;
   right: 10px;
   z-index: 2;
-  background: rgba(17, 24, 39, 0.78);
-  color: #f8fafc;
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
   padding: 4px 10px;
@@ -101,8 +108,8 @@ cdk-virtual-scroll-viewport {
 
 .flip-card-back {
   transform: rotateY(180deg);
-  background: #111827;
-  color: #f8fafc;
+  background: #050505;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -120,13 +127,13 @@ cdk-virtual-scroll-viewport {
 .flip-card-back p {
   margin: 0;
   font-size: 0.92rem;
-  color: #d1d5db;
+  color: #d4d4d8;
 }
 
 .gallery-empty {
   padding: 24px;
   text-align: center;
-  color: rgba(0, 0, 0, 0.7);
+  color: #d4d4d8;
 }
 
 @media (max-width: 1024px) {

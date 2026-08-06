@@ -18,7 +18,10 @@ export class NavbarComponent {
     ) { }
     openAddCarForm() {
         const dialogRef = this._dialog.open(CarAddComponent, {
-            width: "100%"
+            width: 'min(960px, 95vw)',
+            maxWidth: '95vw',
+            panelClass: 'theme-dialog-panel',
+            autoFocus: false,
         });
         dialogRef.afterClosed().subscribe({
             next: (val) => {
@@ -33,7 +36,10 @@ export class NavbarComponent {
 
     openAddPartForm() {
         const dialogRef = this._dialog.open(PartAddComponent, {
-            width: "100%"
+            width: 'min(960px, 95vw)',
+            maxWidth: '95vw',
+            panelClass: 'theme-dialog-panel',
+            autoFocus: false,
         });
         dialogRef.afterClosed().subscribe({
             next: (val) => {
