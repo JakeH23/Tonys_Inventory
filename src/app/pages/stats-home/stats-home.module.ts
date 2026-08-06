@@ -4,11 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { StatsHomeComponent } from './stats-home.component';
 import { CarouselComponent } from '../../components/carousel/carousel.component';
 import { AppMaterialModule } from '../../shared/app-material.module';
+import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [{ path: '', component: StatsHomeComponent }];
 
 @NgModule({
   declarations: [StatsHomeComponent, CarouselComponent],
-  imports: [CommonModule, AppMaterialModule, RouterModule.forChild(routes)]
+  imports: [CommonModule, AppMaterialModule, SharedModule, RouterModule.forChild(routes)]
 })
 export class StatsHomeModule {}

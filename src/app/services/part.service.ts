@@ -45,12 +45,14 @@ export class PartService {
     if (!query) {
       return params;
     }
-    if (query.page) params['page'] = String(query.page);
-    if (query.pageSize) params['pageSize'] = String(query.pageSize);
+    if (query.page !== undefined) params['page'] = String(query.page);
+    if (query.pageSize !== undefined) params['pageSize'] = String(query.pageSize);
     if (query.sortBy) params['sortBy'] = query.sortBy;
     if (query.sortDirection) params['sortDirection'] = query.sortDirection;
     if (query.search) params['search'] = query.search;
     if (query.filter) params['filter'] = query.filter;
+    if (query.category) params['category'] = query.category;
+    if (query.vehicleSide) params['vehicleSide'] = query.vehicleSide;
     return params;
   }
 }

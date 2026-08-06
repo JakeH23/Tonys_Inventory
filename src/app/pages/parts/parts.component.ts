@@ -65,7 +65,8 @@ export class PartsComponent implements OnInit {
       page: 1,
       pageSize: 20,
       search: this.filterInput?.nativeElement?.value || '',
-      filter: this.selectedCategory || this.selectedVehicleSide || undefined,
+      category: this.selectedCategory || undefined,
+      vehicleSide: this.selectedVehicleSide || undefined,
     }).subscribe({
       next: (res) => {
         this.allData = res.items;

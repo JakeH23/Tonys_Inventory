@@ -3,6 +3,8 @@ const router = express.Router();
 const Part = require('../models/part');
 const config = require('../config/database');
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 // Route to get all parts with optional filtering, sorting, and pagination
 router.get('/', async (req, res, next) => {
   try {
@@ -13,23 +15,39 @@ router.get('/', async (req, res, next) => {
     const search = (req.query.search || '').toString().trim().toLowerCase();
     const category = (req.query.category || '').toString().trim();
     const vehicleSide = (req.query.vehicleSide || '').toString().trim();
+    const legacyFilter = (req.query.filter || '').toString().trim();
 
-    const query = {};
+    const filters = [];
     if (search) {
-      query.$or = [
+      filters.push({
+        $or: [
         { CatalogNumber: { $regex: search, $options: 'i' } },
         { Category: { $regex: search, $options: 'i' } },
         { ModelNumber: { $regex: search, $options: 'i' } },
         { PartNumber: { $regex: search, $options: 'i' } },
         { Description: { $regex: search, $options: 'i' } },
-      ];
+        ],
+      });
     }
     if (category) {
-      query.Category = category;
+      filters.push({ Category: category });
     }
     if (vehicleSide) {
-      query.VehicleSide = vehicleSide;
+      filters.push({ VehicleSide: vehicleSide });
     }
+    if (legacyFilter && !category && !vehicleSide) {
+      const escapedLegacyFilter = escapeRegExp(legacyFilter);
+      filters.push({
+        $or: [
+          { Category: { $regex: escapedLegacyFilter, $options: 'i' } },
+          { VehicleSide: { $regex: escapedLegacyFilter, $options: 'i' } },
+        ],
+      });
+    }
+
+    const query = filters.length <= 1
+      ? (filters[0] || {})
+      : { $and: filters };
 
     const total = await Part.countDocuments(query);
     const parts = await Part.find(query)
@@ -47,10 +65,10 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const part = await Part.getPartById(req.params.id);
-    part.Image = `https://res.cloudinary.com/${config.cloudinary_cloud_name}/image/upload/p-${part.CatalogNumber}.png`;
     if (!part) {
       return res.status(404).json({ success: false, msg: 'Part not found' });
     }
+    part.Image = `https://res.cloudinary.com/${config.cloudinary_cloud_name}/image/upload/p-${part.CatalogNumber}.png`;
     res.json(part);
   } catch (err) {
     next(err);

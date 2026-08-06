@@ -5,6 +5,8 @@ export interface InventoryQuery {
   sortDirection?: 'asc' | 'desc';
   search?: string;
   filter?: string;
+  category?: string;
+  vehicleSide?: string;
 }
 
 export interface PaginatedResponse<T> {

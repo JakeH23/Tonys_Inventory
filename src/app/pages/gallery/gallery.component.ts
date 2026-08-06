@@ -26,6 +26,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   flippedCards: Record<number, boolean> = {};
   filterControl = new FormControl<string>('');
   filterValue = '';
+  isLoading = false;
+  hasError = false;
+  errorMessage = '';
   private destroy$ = new Subject<void>();
 
   constructor(private carService: CarService,
@@ -38,6 +41,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
         this.filterValue = (value || '').trim().toLowerCase();
         this.applyFilter();
       });
+
+    this.loadGalleryCars();
+    this.cdr.detectChanges();
+  }
+
+  loadGalleryCars() {
+    this.isLoading = true;
+    this.hasError = false;
+    this.errorMessage = '';
 
     this.carService.getCarList({ pageSize: 0, sortBy: 'Id', sortDirection: 'asc' }).subscribe({
       next: (res: any) => {
@@ -54,13 +66,20 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
         this.carsArray = this.shuffleArray(galleryCars);
         this.applyFilter();
+        this.isLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
+        this.isLoading = false;
+        this.hasError = true;
+        this.errorMessage = 'We could not load gallery items right now. Please try again.';
+        this.carsArray = [];
+        this.filteredCarsArray = [];
+        this.groupedCarsArray = [];
         console.error('Error fetching gallery cars:', err);
+        this.cdr.detectChanges();
       }
     });
-    this.cdr.detectChanges();
   }
 
   clearSearch() {
@@ -77,6 +96,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   get resultsCount(): number {
     return this.filteredCarsArray.length;
+  }
+
+  get showEmptyState(): boolean {
+    return !this.isLoading && !this.hasError && this.groupedCarsArray.length === 0;
   }
 
   ngOnDestroy(): void {

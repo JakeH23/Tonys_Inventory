@@ -12,7 +12,32 @@
   </div>
 </div>
 
-<cdk-virtual-scroll-viewport itemSize="300" class="gallery-grid">
+<app-inventory-state
+  *ngIf="isLoading"
+  [loading]="true"
+  title="Loading gallery"
+  loadingMessage="Fetching images from your inventory…"
+></app-inventory-state>
+
+<app-inventory-state
+  *ngIf="hasError && !isLoading"
+  [error]="true"
+  title="Gallery unavailable"
+  [message]="errorMessage"
+  icon="error_outline"
+  [showRetryButton]="true"
+  (retry)="loadGalleryCars()"
+></app-inventory-state>
+
+<app-inventory-state
+  *ngIf="showEmptyState"
+  [empty]="true"
+  title="No cars found"
+  [message]="filterValue ? 'No cars match your current search term.' : 'No cars are available for the gallery yet.'"
+  icon="photo_library"
+></app-inventory-state>
+
+<cdk-virtual-scroll-viewport itemSize="300" class="gallery-grid" *ngIf="!isLoading && !hasError && groupedCarsArray.length">
   <div class="gallery-row" *cdkVirtualFor="let row of groupedCarsArray">
     <div class="gallery-item" *ngFor="let car of row" (click)="toggleFlip(car.Id)">
       <div class="flip-card" [class.flipped]="isFlipped(car.Id)">
@@ -38,10 +63,5 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="gallery-empty" *ngIf="!groupedCarsArray.length">
-    <h3>No cars found</h3>
-    <p>Try a different search term.</p>
   </div>
 </cdk-virtual-scroll-viewport>

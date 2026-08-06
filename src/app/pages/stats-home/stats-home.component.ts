@@ -28,7 +28,7 @@ export class StatsHomeComponent implements OnInit {
     'manufacturersCode',
     'estimatedValue',
   ];
-  dataSource!: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<any>([]);
 
 
   constructor(
@@ -38,24 +38,9 @@ export class StatsHomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllStatistics();
     this.getRandomCarImages();
     this.getDashboardReport();
     this.cdr.detectChanges();
-  }
-
-  getAllStatistics() {
-    this._statsService.getAllStatistics().subscribe({
-      next: (res) => {
-        this.totalCarsCount = res.statistics.totalCarsCount;
-        this.totalCarsValue = res.statistics.totalCarsValue;
-        this.boxedTotal = res.statistics.boxedTotal;
-        this.unboxedTotal = res.statistics.unboxedTotal;
-        this.dataSource = new MatTableDataSource(res.statistics.mostExpensiveCars);
-        this.cdr.detectChanges();
-      },
-      error: console.log,
-    });
   }
 
   getRandomCarImages() {
@@ -70,6 +55,7 @@ export class StatsHomeComponent implements OnInit {
 
   getDashboardReport() {
     this.reportLoading = true;
+    this.reportError = '';
     this._statsService.getDashboardReport().subscribe({
       next: (res) => {
         this.totalCarsCount = res.totalCars;
@@ -85,8 +71,13 @@ export class StatsHomeComponent implements OnInit {
         this.reportLoading = false;
         this.reportError = 'Unable to load the latest analytics.';
         console.log(err);
+        this.cdr.detectChanges();
       },
     });
+  }
+
+  get showEmptyState(): boolean {
+    return !this.reportLoading && !this.reportError && this.totalCarsCount === 0;
   }
 
   exportCars() {
