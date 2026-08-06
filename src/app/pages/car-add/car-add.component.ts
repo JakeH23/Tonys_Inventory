@@ -23,6 +23,12 @@ export class CarAddComponent implements OnInit {
   carImage: CarImage | null = null;
   @ViewChild("fileInput") fileInput: any;
 
+  readonly requiredControlNames = ['ManufacturersCode', 'Make', 'Model', 'EstimatedValue', 'Boxed'];
+  readonly sectionRequiredControls: Record<'details' | 'valuation', string[]> = {
+    details: ['ManufacturersCode', 'Make', 'Model'],
+    valuation: ['EstimatedValue', 'Boxed'],
+  };
+
   image = '';
   boxedChoices: BoxedChoice[] = [{ label: "Yes", value: true }, { label: "No", value: false }];
 
@@ -52,6 +58,23 @@ export class CarAddComponent implements OnInit {
       ...this.data,
       EstimatedValue: estimatedValue,
     });
+  }
+
+  get requiredCompleteCount(): number {
+    return this.requiredControlNames.filter((controlName) => {
+      const control = this.carForm.get(controlName);
+      return !!control && control.valid;
+    }).length;
+  }
+
+  getSectionSummary(section: 'details' | 'valuation'): string {
+    const controls = this.sectionRequiredControls[section];
+    const validCount = controls.filter((controlName) => {
+      const control = this.carForm.get(controlName);
+      return !!control && control.valid;
+    }).length;
+
+    return `${validCount}/${controls.length} required complete`;
   }
 
   onFormSubmit() {

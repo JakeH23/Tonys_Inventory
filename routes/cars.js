@@ -3,6 +3,12 @@ const router = express.Router();
 const Car = require('../models/car');
 const config = require('../config/database');
 
+const SEARCH_FIELDS = ['ManufacturersCode', 'Make', 'Model', 'Notes'];
+
+function escapeRegex(value = '') {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Route to bulk update estimated values for cars
 router.post('/bulk-estimated-values', async (req, res, next) => {
   try {
@@ -67,12 +73,19 @@ router.get('/', async (req, res, next) => {
 
     const query = {};
     if (search) {
-      query.$or = [
-        { ManufacturersCode: { $regex: search, $options: 'i' } },
-        { Make: { $regex: search, $options: 'i' } },
-        { Model: { $regex: search, $options: 'i' } },
-        { Notes: { $regex: search, $options: 'i' } },
-      ];
+      const searchTerms = search
+        .split(/\s+/)
+        .map((term) => term.trim())
+        .filter(Boolean)
+        .map((term) => escapeRegex(term));
+
+      if (searchTerms.length) {
+        query.$and = searchTerms.map((term) => ({
+          $or: SEARCH_FIELDS.map((field) => ({
+            [field]: { $regex: term, $options: 'i' },
+          })),
+        }));
+      }
     }
     if (filter === 'boxed') {
       query.Boxed = true;

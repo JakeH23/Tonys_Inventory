@@ -75,11 +75,13 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     // Subscribe to route query params so back/forward triggers update
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const cached = this.stateService.snapshot;
+      const hasQueryState = ['filter', 'page', 'size', 'sort', 'dir'].some((key) => params[key] !== undefined);
 
       const qp = this.parseQueryParams(params);
-      this.filterValue = qp.filter ?? cached.filter ?? '';
-      this.pageIndex = qp.pageIndex ?? cached.pageIndex ?? 0;
-      this.pageSize = qp.pageSize ?? cached.pageSize ?? 15;
+      this.filterValue = hasQueryState ? (qp.filter ?? cached.filter ?? '') : '';
+      this.pageIndex = hasQueryState ? (qp.pageIndex ?? cached.pageIndex ?? 0) : 0;
+      this.pageSize = hasQueryState ? (qp.pageSize ?? cached.pageSize ?? 15) : 15;
+      this.activeFilterLabel = this.filterValue ? `Filtered by “${this.filterValue}”` : 'All cars';
       this.filterControl.setValue(this.filterValue, { emitEvent: false });
 
       this.getCarList(qp);
@@ -135,6 +137,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterValue = '';
     this.activeFilterLabel = 'All cars';
     this.pageIndex = 0;
+    this.stateService.setState({ filter: '', pageIndex: 0 });
+    this.updateQueryParams({ filter: null, pageIndex: 0 });
     if (this.allCars.length) {
       this.applyLocalPagination();
     } else {
@@ -206,7 +210,7 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
         const current = this.stateService.snapshot;
         // merge query params into cached state
         this.stateService.setState({
-          filter: qp?.filter ?? current.filter,
+          filter: this.filterValue,
           pageIndex: this.pageIndex,
           pageSize: this.pageSize,
           sortActive: qp?.sortActive ?? current.sortActive ?? activeSort,
@@ -322,6 +326,11 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       return filteredCars;
     }
 
+    const searchTerms = normalizedFilter
+      .split(/\s+/)
+      .map((term) => term.trim())
+      .filter(Boolean);
+
     return filteredCars.filter((car) => {
       const searchableValues = [
         car.ManufacturersCode,
@@ -336,7 +345,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
         .map((value) => (value == null ? '' : String(value)))
         .join(' ')
         .toLowerCase();
-      return dataStr.includes(normalizedFilter);
+
+      return searchTerms.every((term) => dataStr.includes(term));
     });
   }
 
@@ -372,6 +382,10 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   private defaultFilterPredicate = (data: Car, filter: string) => {
     const normalizedFilter = (filter || '').trim().toLowerCase();
     if (!normalizedFilter) return true;
+    const searchTerms = normalizedFilter
+      .split(/\s+/)
+      .map((term) => term.trim())
+      .filter(Boolean);
     const searchableValues = [
       data.ManufacturersCode,
       data.Make,
@@ -385,7 +399,8 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
       .map((value) => (value == null ? '' : String(value)))
       .join(' ')
       .toLowerCase();
-    return dataStr.indexOf(normalizedFilter) !== -1;
+
+    return searchTerms.every((term) => dataStr.includes(term));
   };
 
   // Called from template input (keyup)

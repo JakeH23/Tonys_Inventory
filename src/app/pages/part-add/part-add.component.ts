@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreService } from '../../components/core/core.service';
 import { PartService } from '../../services/part.service';
@@ -15,6 +15,12 @@ export class PartAddComponent implements OnInit {
   partForm: FormGroup;
   @ViewChild("fileInput") fileInput: any;
 
+  readonly requiredControlNames = ['CatalogNumber', 'Category', 'PartNumber', 'Description'];
+  readonly sectionRequiredControls: Record<'details' | 'description', string[]> = {
+    details: ['CatalogNumber', 'Category', 'PartNumber'],
+    description: ['Description'],
+  };
+
   image = '';
 
   constructor(
@@ -27,13 +33,13 @@ export class PartAddComponent implements OnInit {
   ) {
     this.partForm = this._fb.group({
       Id: '',
-      CatalogNumber: '',
-      Category: '',
+      CatalogNumber: ['', [Validators.required, Validators.maxLength(60)]],
+      Category: ['', Validators.required],
       ModelNumber: '',
-      PartNumber: '',
+      PartNumber: ['', [Validators.required, Validators.maxLength(80)]],
       VehicleSide: '',
-      Description: '',
-      Notes: '',
+      Description: ['', [Validators.required, Validators.maxLength(300)]],
+      Notes: ['', Validators.maxLength(300)],
       Image: ''
     });
   }
@@ -42,29 +48,52 @@ export class PartAddComponent implements OnInit {
     this.partForm.patchValue(this.data);
   }
 
+  get requiredCompleteCount(): number {
+    return this.requiredControlNames.filter((controlName) => {
+      const control = this.partForm.get(controlName);
+      return !!control && control.valid;
+    }).length;
+  }
+
+  getSectionSummary(section: 'details' | 'description'): string {
+    const controls = this.sectionRequiredControls[section];
+    const validCount = controls.filter((controlName) => {
+      const control = this.partForm.get(controlName);
+      return !!control && control.valid;
+    }).length;
+
+    return `${validCount}/${controls.length} required complete`;
+  }
+
   onFormSubmit() {
-    if (this.partForm.valid) {
-      if (this.partForm.controls['Id'].value != '') {
-        this._partService.updatePart(this.partForm.controls['Id'].value, this.partForm.value).subscribe({
-          next: () => {
-            this._coreService.openSnackBar('Part added successfully');
-            this._dialogRef.close(this.partForm.controls['Id'].value);
-          },
-          error: (err: any) => {
-            console.error(err);
-          },
-        });
-      } else {
-        this._partService.addPart(this.partForm.value).subscribe({
-          next: (res) => {
-            this._coreService.openSnackBar('Part added successfully');
-            this._dialogRef.close(res.id);
-          },
-          error: (err: any) => {
-            console.error(err);
-          },
-        });
-      }
+    if (this.partForm.invalid) {
+      this.partForm.markAllAsTouched();
+      this._coreService.openSnackBar('Please complete the highlighted fields first.');
+      return;
+    }
+
+    if (this.partForm.controls['Id'].value != '') {
+      this._partService.updatePart(this.partForm.controls['Id'].value, this.partForm.value).subscribe({
+        next: () => {
+          this._coreService.openSnackBar('Part updated successfully');
+          this._dialogRef.close(this.partForm.controls['Id'].value);
+        },
+        error: (err: any) => {
+          this._coreService.openSnackBar('Unable to update the part right now.');
+          console.error(err);
+        },
+      });
+    } else {
+      this._partService.addPart(this.partForm.value).subscribe({
+        next: (res) => {
+          this._coreService.openSnackBar('Part added successfully');
+          this._dialogRef.close(res.id);
+        },
+        error: (err: any) => {
+          this._coreService.openSnackBar('Unable to add the part right now.');
+          console.error(err);
+        },
+      });
     }
   }
 

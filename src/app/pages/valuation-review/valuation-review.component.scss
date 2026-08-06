@@ -1,0 +1,111 @@
+.valuation-review-shell {
+  padding: 24px 20px 40px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.surface-panel {
+  margin-top: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.valuation-review-header {
+  margin-bottom: 14px;
+}
+
+.valuation-review-header h1 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+}
+
+.valuation-review-header p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.stale-review {
+  color: #0f172a;
+}
+
+.stale-review-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.stale-review-header-row h3 {
+  margin: 0 0 4px;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.stale-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stale-review-row {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.stale-car-title {
+  font-weight: 700;
+}
+
+.stale-car-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.stale-actions {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stale-value-input {
+  width: 130px;
+}
+
+@media (max-width: 768px) {
+  .stale-review-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stale-car-sub {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .stale-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .stale-value-input {
+    width: 100%;
+  }
+}

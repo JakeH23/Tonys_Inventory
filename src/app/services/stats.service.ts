@@ -29,6 +29,10 @@ export class StatsService {
     return this._http.get(this.buildUrl('api/statistics/report'), { headers: this.headers });
   }
 
+  getInventoryAlerts(): Observable<any> {
+    return this._http.get(this.buildUrl('api/statistics/alerts'), { headers: this.headers });
+  }
+
   exportCars(): Observable<Blob> {
     return this._http.get(this.buildUrl('api/statistics/export/cars'), { headers: this.headers, responseType: 'blob' });
   }

@@ -1,0 +1,87 @@
+<div class="valuation-review-shell">
+  <div class="valuation-review-header">
+    <h1>Valuation Review</h1>
+    <p>Review stale valuations, search market comparables on Google, and log updates quickly.</p>
+  </div>
+
+  <app-inventory-state
+    *ngIf="alertsLoading"
+    [loading]="true"
+    title="Loading valuation review"
+    loadingMessage="Preparing stale valuation items..."
+  ></app-inventory-state>
+
+  <app-inventory-state
+    *ngIf="alertsError && !alertsLoading"
+    [error]="true"
+    title="Valuation review unavailable"
+    [message]="alertsError"
+    icon="error_outline"
+    [showRetryButton]="true"
+    (retry)="getInventoryAlerts()"
+  ></app-inventory-state>
+
+  <app-inventory-state
+    *ngIf="!alertsLoading && !alertsError && (!staleValuationRule || staleValuationRule.count === 0)"
+    [empty]="true"
+    title="No stale valuations"
+    message="Everything is up to date right now."
+    icon="task_alt"
+  ></app-inventory-state>
+
+  <section class="stale-review surface-panel" *ngIf="!alertsLoading && !alertsError && staleValuationRule && staleValuationRule.count > 0">
+    <div class="stale-review-header-row">
+      <div>
+        <h3>Stale valuation items</h3>
+        <p class="section-subtitle">Use quick actions to check market pricing and keep value history current.</p>
+      </div>
+      <button mat-stroked-button type="button" (click)="getInventoryAlerts()">Refresh list</button>
+    </div>
+
+    <div class="stale-review-list">
+      <div class="stale-review-row" *ngFor="let item of staleValuationRule.items">
+        <div class="stale-car-meta">
+          <div class="stale-car-title">{{ item.Make }} {{ item.Model }}</div>
+          <div class="stale-car-sub">
+            <span *ngIf="item.ManufacturersCode">{{ item.ManufacturersCode }}</span>
+            <span>{{ item.Boxed ? 'Boxed' : 'Unboxed' }}</span>
+            <span>Current: £{{ item.EstimatedValue }}</span>
+          </div>
+        </div>
+
+        <div class="stale-actions">
+          <button mat-stroked-button type="button" (click)="copyCarName(item)">Copy name</button>
+          <button mat-stroked-button type="button" (click)="openGoogleValuationSearch(item)">Search Google</button>
+
+          <mat-form-field appearance="outline" class="stale-value-input">
+            <mat-label>New value</mat-label>
+            <input
+              matInput
+              type="number"
+              min="0"
+              [value]="getStaleDraftValue(item)"
+              (input)="setStaleDraftValue(item.Id, $any($event.target).value)"
+            />
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="isSavingStaleReview(item.Id)"
+            (click)="updateStaleValuation(item)">
+            Update value
+          </button>
+
+          <button
+            mat-raised-button
+            type="button"
+            [disabled]="isSavingStaleReview(item.Id)"
+            (click)="dismissStaleValuation(item)">
+            Dismiss unchanged
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

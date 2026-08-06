@@ -71,38 +71,101 @@
       </div>
     </div>
 
-    <div class="flex-grid-half">
-      <div class="col">
-        <app-carousel [cars]="cars"></app-carousel>
+    <section class="surface-panel">
+      <div class="panel-header-row">
+        <h3><b>Collection spotlight</b></h3>
       </div>
-      <div class="col hide-on-mobile">
-        <h3><b>Highest Valued Cars</b></h3>
-        <div class="table-container">
-          <table mat-table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="make">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Make </th>
-              <td mat-cell *matCellDef="let row"> {{row.Make}}</td>
-            </ng-container>
-            <ng-container matColumnDef="model">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
-              <td mat-cell *matCellDef="let row"> {{row.Model}}</td>
-            </ng-container>
-            <ng-container matColumnDef="manufacturersCode">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturers Code </th>
-              <td mat-cell *matCellDef="let row"> {{row.ManufacturersCode}}</td>
-            </ng-container>
-            <ng-container matColumnDef="estimatedValue">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Value </th>
-              <td mat-cell *matCellDef="let row"> £{{ getCurrentEstimatedValue(row) }}</td>
-            </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell" colspan="4">No data to show</td>
-            </tr>
-          </table>
+      <div class="flex-grid-half">
+        <div class="col">
+          <app-carousel [cars]="cars"></app-carousel>
+        </div>
+        <div class="col hide-on-mobile">
+          <h3><b>Highest Valued Cars</b></h3>
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort>
+              <ng-container matColumnDef="make">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Make </th>
+                <td mat-cell *matCellDef="let row"> {{row.Make}}</td>
+              </ng-container>
+              <ng-container matColumnDef="model">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
+                <td mat-cell *matCellDef="let row"> {{row.Model}}</td>
+              </ng-container>
+              <ng-container matColumnDef="manufacturersCode">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturers Code </th>
+                <td mat-cell *matCellDef="let row"> {{row.ManufacturersCode}}</td>
+              </ng-container>
+              <ng-container matColumnDef="estimatedValue">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Estimated Value </th>
+                <td mat-cell *matCellDef="let row"> £{{ getCurrentEstimatedValue(row) }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">No data to show</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <section class="alerts-section surface-panel">
+      <div class="alerts-header-row">
+        <div>
+          <h3><b>Inventory alerts and reminders</b></h3>
+          <p class="section-subtitle">Proactive reminders to keep your inventory complete and up to date.</p>
+        </div>
+        <div class="panel-header-actions">
+          <a mat-stroked-button routerLink="/valuation-review">Open valuation review</a>
+          <button mat-stroked-button type="button" (click)="getInventoryAlerts()">Refresh alerts</button>
+        </div>
+      </div>
+
+      <app-inventory-state
+        *ngIf="alertsLoading"
+        [loading]="true"
+        title="Checking inventory rules"
+        loadingMessage="Looking for missing details and high-risk items..."
+      ></app-inventory-state>
+
+      <app-inventory-state
+        *ngIf="alertsError && !alertsLoading"
+        [error]="true"
+        title="Alerts unavailable"
+        [message]="alertsError"
+        icon="error_outline"
+        [showRetryButton]="true"
+        (retry)="getInventoryAlerts()"
+      ></app-inventory-state>
+
+      <div class="alerts-summary" *ngIf="!alertsLoading && !alertsError && alertsSummary">
+        Active rules: {{ alertsSummary.activeRules }} / {{ inventoryAlerts.length }}
+        <span class="threshold-note">Stale valuation rule: older than {{ alertsSummary.staleValuationDays }} days</span>
+      </div>
+
+      <div class="alerts-grid" *ngIf="!alertsLoading && !alertsError">
+        <div class="alert-card" *ngFor="let alert of inventoryAlerts" [ngClass]="getAlertClass(alert.severity)">
+          <div class="alert-title-row">
+            <mat-icon>{{ getAlertIcon(alert.severity) }}</mat-icon>
+            <h4>{{ alert.title }}</h4>
+            <span class="alert-count">{{ alert.count }}</span>
+          </div>
+          <p class="alert-description">{{ alert.description }}</p>
+
+          <div class="alert-clear" *ngIf="alert.count === 0">All clear.</div>
+
+          <ul class="alert-items" *ngIf="alert.count > 0">
+            <li *ngFor="let item of alert.items">
+              <a [routerLink]="['/cars', item.Id]">
+                {{ item.Make }} {{ item.Model }}
+                <span *ngIf="item.ManufacturersCode">({{ item.ManufacturersCode }})</span>
+                - £{{ item.EstimatedValue }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
   </ng-container>
 </div>

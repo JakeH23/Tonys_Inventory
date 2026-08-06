@@ -6,6 +6,34 @@ import { CarImagesService } from '../../services/car-images.service';
 import { Car } from '../../models/car.model';
 import { getMostRecentEstimatedValue } from '../../models/estimated-value.model';
 
+interface InventoryAlertItem {
+  Id: number;
+  Make: string;
+  Model: string;
+  ManufacturersCode: string;
+  EstimatedValue: number;
+}
+
+interface InventoryAlertRule {
+  id: string;
+  title: string;
+  description: string;
+  severity: 'info' | 'warning' | 'error';
+  count: number;
+  items: InventoryAlertItem[];
+}
+
+interface InventoryAlertsResponse {
+  generatedAt: string;
+  summary: {
+    totalCars: number;
+    averageValue: number;
+    staleValuationDays: number;
+    activeRules: number;
+  };
+  rules: InventoryAlertRule[];
+}
+
 @Component({
   selector: 'app-stats-home',
   templateUrl: './stats-home.component.html',
@@ -22,6 +50,10 @@ export class StatsHomeComponent implements OnInit {
   averageValue = 0;
   reportLoading = false;
   reportError = '';
+  alertsLoading = false;
+  alertsError = '';
+  inventoryAlerts: InventoryAlertRule[] = [];
+  alertsSummary: InventoryAlertsResponse['summary'] | null = null;
   displayedColumns: string[] = [
     'make',
     'model',
@@ -40,6 +72,7 @@ export class StatsHomeComponent implements OnInit {
   ngOnInit(): void {
     this.getRandomCarImages();
     this.getDashboardReport();
+    this.getInventoryAlerts();
     this.cdr.detectChanges();
   }
 
@@ -78,6 +111,41 @@ export class StatsHomeComponent implements OnInit {
 
   get showEmptyState(): boolean {
     return !this.reportLoading && !this.reportError && this.totalCarsCount === 0;
+  }
+
+  getInventoryAlerts() {
+    this.alertsLoading = true;
+    this.alertsError = '';
+
+    this._statsService.getInventoryAlerts().subscribe({
+      next: (res: InventoryAlertsResponse) => {
+        this.inventoryAlerts = res?.rules || [];
+        this.alertsSummary = res?.summary || null;
+        this.alertsLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.alertsLoading = false;
+        this.alertsError = 'Unable to load inventory alerts right now.';
+        console.log(err);
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  getAlertClass(severity: InventoryAlertRule['severity']): string {
+    return `alert-${severity}`;
+  }
+
+  getAlertIcon(severity: InventoryAlertRule['severity']): string {
+    switch (severity) {
+      case 'error':
+        return 'warning';
+      case 'warning':
+        return 'report_problem';
+      default:
+        return 'info';
+    }
   }
 
   exportCars() {

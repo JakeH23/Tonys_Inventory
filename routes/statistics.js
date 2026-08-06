@@ -71,6 +71,15 @@ router.get('/statistics/report', async (req, res, next) => {
   }
 });
 
+router.get('/statistics/alerts', async (req, res, next) => {
+  try {
+    const alerts = await Statistic.getInventoryAlerts();
+    res.json(alerts);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get('/statistics/export/cars', async (req, res, next) => {
   try {
     const cars = await Car.find({}).lean();

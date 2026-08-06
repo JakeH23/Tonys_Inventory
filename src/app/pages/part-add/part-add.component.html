@@ -2,15 +2,26 @@
     <h1>Part Form</h1>
 </div>
 <form [formGroup]="partForm" (ngSubmit)="onFormSubmit()">
+    <div class="form-progress" aria-live="polite">
+        <span class="progress-pill">{{ requiredCompleteCount }}/{{ requiredControlNames.length }} required complete</span>
+        <span class="progress-status" [class.is-valid]="partForm.valid">{{ partForm.valid ? 'Ready to save' : 'Complete required fields to continue' }}</span>
+    </div>
     <div mat-dialog-content class="content">
         <div class="row">
             <div class="col">
+                <div class="section-summary">
+                    <h2>Part details <span class="required-chip">Required</span></h2>
+                    <p>{{ getSectionSummary('details') }}</p>
+                </div>
                 <mat-form-field appearance="outline">
-                    <mat-label>Catalogue Number</mat-label>
+                    <mat-label>Catalogue Number *</mat-label>
                     <input matInput type="text" placeholder="Ex. E-1000" formControlName="CatalogNumber">
+                    <mat-hint class="required-hint">Required</mat-hint>
+                    <mat-error *ngIf="partForm.get('CatalogNumber')?.hasError('required')">Catalogue number is required.</mat-error>
+                    <mat-error *ngIf="partForm.get('CatalogNumber')?.hasError('maxlength')">Keep this under 60 characters.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Category</mat-label>
+                    <mat-label>Category *</mat-label>
                     <mat-select formControlName="Category">
                         <mat-option value="Ext Electrical">Ext Electrical</mat-option>
                         <mat-option value="Ext Bodywork">Ext Bodywork</mat-option>
@@ -23,6 +34,8 @@
                         <mat-option value="Brakes">Brakes</mat-option>
                         <mat-option value="Other">Other</mat-option>
                     </mat-select>
+                    <mat-hint class="required-hint">Required</mat-hint>
+                    <mat-error *ngIf="partForm.get('Category')?.hasError('required')">Category is required.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Model Number</mat-label>
@@ -35,8 +48,11 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Part Number</mat-label>
+                    <mat-label>Part Number *</mat-label>
                     <input matInput type="text" placeholder="Ex. 9600183R" formControlName="PartNumber">
+                    <mat-hint class="required-hint">Required</mat-hint>
+                    <mat-error *ngIf="partForm.get('PartNumber')?.hasError('required')">Part number is required.</mat-error>
+                    <mat-error *ngIf="partForm.get('PartNumber')?.hasError('maxlength')">Keep this under 80 characters.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Vehicle Side</mat-label>
@@ -49,14 +65,22 @@
                 </mat-form-field>
             </div>
             <div class="col">
+                <div class="section-summary">
+                    <h2>Description and notes <span class="required-chip">Required</span></h2>
+                    <p>{{ getSectionSummary('description') }}</p>
+                </div>
                 <mat-form-field appearance="outline">
-                    <mat-label>Description</mat-label>
+                    <mat-label>Description *</mat-label>
                     <textarea rows="3" matInput placeholder="Ex. Electric Wing Mirror"
                         formControlName="Description"></textarea>
+                    <mat-hint class="required-hint">Required</mat-hint>
+                    <mat-error *ngIf="partForm.get('Description')?.hasError('required')">Description is required.</mat-error>
+                    <mat-error *ngIf="partForm.get('Description')?.hasError('maxlength')">Keep description under 300 characters.</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Notes</mat-label>
                     <textarea rows="3" matInput placeholder="Ex. Damaged" formControlName="Notes"></textarea>
+                    <mat-error *ngIf="partForm.get('Notes')?.hasError('maxlength')">Keep notes under 300 characters.</mat-error>
                 </mat-form-field>
                 <!-- <div class="row pt-2 ml-0">
                     <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
@@ -77,6 +101,6 @@
     </div>
     <div mat-dialog-actions class="action">
         <button mat-raised-button type="button" [mat-dialog-close]="false">Cancel</button>
-        <button mat-raised-button class="lime-btn" type="submit">{{data ? 'Update': 'Save'}}</button>
+        <button mat-raised-button class="lime-btn" type="submit" [disabled]="partForm.invalid">{{data ? 'Update': 'Save'}}</button>
     </div>
 </form>
