@@ -8,6 +8,8 @@
     "heroku-postbuild": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless --include='src/app/**/*.spec.ts'",
+    "prepare": "husky install",
     "migrate:estimated-value": "node scripts/migrate-estimated-value-history.js",
     "migrate:estimated-value:dry-run": "node scripts/migrate-estimated-value-history.js --dry-run"
   },
@@ -48,6 +50,7 @@
     "@typescript-eslint/utils": "^8.65.0",
     "angular-eslint": "21.0.0",
     "eslint": "^9.39.5",
+    "husky": "^9.1.7",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
