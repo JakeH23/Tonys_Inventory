@@ -75,6 +75,16 @@ export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // Subscribe to route query params so back/forward triggers update
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params['action'] === 'add') {
+        this.openAddCarForm();
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { action: null },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      }
+
       const cached = this.stateService.snapshot;
       const hasQueryState = ['filter', 'page', 'size', 'sort', 'dir'].some((key) => params[key] !== undefined);
 

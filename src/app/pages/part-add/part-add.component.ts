@@ -14,6 +14,7 @@ import { PartImagesService } from '../../services/part-images.service';
 export class PartAddComponent implements OnInit {
   partForm: FormGroup;
   @ViewChild("fileInput") fileInput: any;
+  attemptedInvalidSubmit = false;
 
   readonly requiredControlNames = ['CatalogNumber', 'Category', 'PartNumber', 'Description'];
   readonly sectionRequiredControls: Record<'details' | 'description', string[]> = {
@@ -45,7 +46,14 @@ export class PartAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.partForm.patchValue(this.data);
+    if (this.data) {
+      this.partForm.patchValue(this.data);
+      this.image = this.data?.Image || '';
+    }
+  }
+
+  get showValidationError(): boolean {
+    return this.attemptedInvalidSubmit && this.partForm.invalid;
   }
 
   get requiredCompleteCount(): number {
@@ -67,10 +75,13 @@ export class PartAddComponent implements OnInit {
 
   onFormSubmit() {
     if (this.partForm.invalid) {
+      this.attemptedInvalidSubmit = true;
       this.partForm.markAllAsTouched();
-      this._coreService.openSnackBar('Please complete the highlighted fields first.');
+      this._coreService.openSnackBar('Please complete the highlighted fields first.', 'Dismiss', 'error');
       return;
     }
+
+    this.attemptedInvalidSubmit = false;
 
     if (this.partForm.controls['Id'].value != '') {
       this._partService.updatePart(this.partForm.controls['Id'].value, this.partForm.value).subscribe({

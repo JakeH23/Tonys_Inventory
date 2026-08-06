@@ -9,7 +9,12 @@ const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 router.get('/', async (req, res, next) => {
   try {
     const page = Math.max(1, parseInt(req.query.page || '1', 10));
-    const pageSize = Math.min(100, Math.max(1, parseInt(req.query.pageSize || '20', 10)));
+    const pageSizeParam = req.query.pageSize;
+    const pageSize = pageSizeParam === undefined || pageSizeParam === ''
+      ? 20
+      : pageSizeParam === '0' || pageSizeParam === 'all'
+        ? null
+        : Math.min(100, Math.max(1, parseInt(pageSizeParam, 10)));
     const sortBy = req.query.sortBy || 'Id';
     const sortDirection = req.query.sortDirection === 'desc' ? -1 : 1;
     const search = (req.query.search || '').toString().trim().toLowerCase();
@@ -50,12 +55,14 @@ router.get('/', async (req, res, next) => {
       : { $and: filters };
 
     const total = await Part.countDocuments(query);
-    const parts = await Part.find(query)
-      .sort({ [sortBy]: sortDirection })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize);
+    const partsQuery = Part.find(query).sort({ [sortBy]: sortDirection });
+    if (pageSize !== null) {
+      partsQuery.skip((page - 1) * pageSize).limit(pageSize);
+    }
 
-    res.json({ items: parts, total, page, pageSize });
+    const parts = await partsQuery;
+
+    res.json({ items: parts, total, page, pageSize: pageSize ?? total });
   } catch (err) {
     next(err);
   }

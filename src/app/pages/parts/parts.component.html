@@ -53,7 +53,7 @@
   </div>
 
   <div class="table-container" *ngIf="!isLoading && !hasError">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)">
 
       <!-- Columns (unchanged) -->
       <ng-container matColumnDef="catalogNumber">
@@ -109,7 +109,13 @@
       </tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of parts"></mat-paginator>
+    <mat-paginator
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="onPageChange($event)"
+      aria-label="Select page of parts"
+    ></mat-paginator>
   </div>
 
   <app-inventory-state
